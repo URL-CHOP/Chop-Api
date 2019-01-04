@@ -1,0 +1,19 @@
+#로컬 환경
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Drive
+    url: jdbc:mysql://101.101.162.240:22
+    username: root
+    password: nexters12
+
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+---
+
+#jpa 설정
+logging:
+  level:
+    org.hibernate.sql : debug
+    org.hibernate.type.descriptor.sql.BasicBinder : TRACE
