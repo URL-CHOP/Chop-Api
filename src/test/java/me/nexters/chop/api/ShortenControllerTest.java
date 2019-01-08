@@ -56,7 +56,7 @@ class ShortenControllerTest {
                 .shortUrl(shortUrl)
                 .build();
 
-        String result = mockMvc.perform(post("/shorten")
+        String result = mockMvc.perform(post("/chop/v1/shorten")
                 .contentType("application/json;charset=UTF-8")
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())

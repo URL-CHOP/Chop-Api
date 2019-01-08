@@ -41,7 +41,7 @@ public class ShortenServiceTest {
     }
 
     @Test
-    public void saveUrl_SaveSuccess() {
+    public void save_SaveSuccess() {
         UrlSaveRequestDto requestDto = UrlSaveRequestDto.builder()
                 .longUrl(longUrl)
                 .shortUrl(shortUrl)
@@ -53,7 +53,7 @@ public class ShortenServiceTest {
     }
 
     @Test
-    public void saveUrl_EmptyLongUrl_DataIntegrityViolationException() {
+    public void save_EmptyLongUrl_DataIntegrityViolationException() {
         UrlSaveRequestDto requestDto = UrlSaveRequestDto.builder()
                 .build();
 

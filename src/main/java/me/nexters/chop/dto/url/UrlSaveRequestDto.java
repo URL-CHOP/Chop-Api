@@ -3,7 +3,7 @@ package me.nexters.chop.dto.url;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 import me.nexters.chop.domain.url.Url;
 
 /**
@@ -11,7 +11,6 @@ import me.nexters.chop.domain.url.Url;
  */
 @NoArgsConstructor
 @Getter
-@Setter
 public class UrlSaveRequestDto {
     private String longUrl;
     private String shortUrl;

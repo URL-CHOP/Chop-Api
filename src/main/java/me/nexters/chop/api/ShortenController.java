@@ -1,11 +1,10 @@
 package me.nexters.chop.api;
 
 import me.nexters.chop.domain.url.Url;
-import me.nexters.chop.dto.url.UrlSaveRequestDto;
 import me.nexters.chop.service.ShortenService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * @author junho.park
@@ -19,8 +18,9 @@ public class ShortenController {
         this.shortenService = shortenService;
     }
 
-    @PostMapping("/shorten")
-    public Url shortenUrl(@RequestBody UrlSaveRequestDto dto) {
-        return shortenService.saveUrl(dto);
+    @PostMapping("/chop/v1/shorten")
+    public Url shortenUrl(@RequestBody Map<String,String> requestBody) {
+        String longUrl = requestBody.get("longUrl");
+        return shortenService.save(longUrl);
     }
 }
