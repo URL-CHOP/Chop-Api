@@ -8,8 +8,23 @@ string:
   base62matchPattern:
     ^([A-Za-z0-9]*)$
 
+#로컬 환경
 spring:
-  h2:
-    console:
-      enabled: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://101.101.162.240:3306/chop?autoReconnect=true&useSSL=false&serverTimezone=UTC
+    username: root
+    password: nexters12
 
+---
+#jpa 설정
+
+jpa:
+  hibernate:
+    naming:
+      physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+logging:
+  level:
+    org.hibernate.sql : debug
+    org.hibernate.type.descriptor.sql.BasicBinder : TRACE
