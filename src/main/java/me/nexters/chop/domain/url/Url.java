@@ -19,10 +19,10 @@ public class Url extends BaseTime {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "long_Url", nullable = false)
     private String longUrl;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "short_Url", nullable = false, unique = true)
     private String shortUrl;
 
     @Builder
