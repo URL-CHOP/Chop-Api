@@ -25,6 +25,9 @@ public class Url extends BaseTime {
     @Column(name = "short_Url", nullable = false, unique = true)
     private String shortUrl;
 
+    @Column(name = "total_count")
+    int totalCount;
+
     @Builder
     public Url(Long id, String longUrl, String shortUrl) {
         this.id = id;

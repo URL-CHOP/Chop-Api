@@ -2,6 +2,7 @@ package me.nexters.chop.api;
 
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.service.RedirectService;
+import me.nexters.chop.service.ShortenService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,11 @@ import java.net.URI;
 public class RedirectController {
 
     private final RedirectService redirectService;
+    private final ShortenService shortenService;
 
-    public RedirectController(RedirectService redirectService) {
+    public RedirectController(RedirectService redirectService, ShortenService shortenService) {
         this.redirectService = redirectService;
+        this.shortenService = shortenService;
     }
 
     @GetMapping("/{shortenUrl}")
@@ -28,6 +31,7 @@ public class RedirectController {
         Url url = redirectService.redirect(shortenUrl);
         String longUrl = url.getLongUrl();
 
+        shortenService.totalCountPlus(longUrl);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(longUrl));
 

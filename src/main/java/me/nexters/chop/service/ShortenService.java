@@ -49,4 +49,10 @@ public class ShortenService {
     public int findMaxIdFromDatabase() {
         return (int) (shortenRepository.getMaxId() + 1);
     }
+
+    @Transactional
+    public void totalCountPlus(String longUrl)
+    {
+        shortenRepository.updateTotalCount(longUrl);
+    }
 }
