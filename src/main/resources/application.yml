@@ -20,17 +20,10 @@ spring:
 #jpa 설정
 
 jpa:
-<<<<<<< HEAD
-    hibernate:
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-
-=======
   hibernate:
     naming:
       physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      
->>>>>>> 1380f74ea603fa3318e57fb3e494afdebce63bfa
+
 logging:
   level:
     org.hibernate.sql : debug
