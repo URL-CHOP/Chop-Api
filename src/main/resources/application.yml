@@ -1,7 +1,7 @@
 string:
   base62:
     abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
-  longUrl:
+  originUrl:
     loooooongggggurl
   shortUrl:
     aab

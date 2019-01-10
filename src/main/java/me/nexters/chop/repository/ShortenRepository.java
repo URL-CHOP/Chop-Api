@@ -12,4 +12,6 @@ public interface ShortenRepository extends JpaRepository<Url, Long> {
 
     @Query("SELECT MAX(id) FROM Url")
     long getMaxId();
+
+    Url findUrlByOriginUrl(String originUrl);
 }
