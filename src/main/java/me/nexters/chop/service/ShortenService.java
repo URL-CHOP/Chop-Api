@@ -3,7 +3,6 @@ package me.nexters.chop.service;
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.dto.url.UrlRequestDto;
 import me.nexters.chop.repository.ShortenRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +18,11 @@ public class ShortenService {
     @Value("${string.base62}")
     private String base62String;
 
-    @Autowired
-    private ShortenRepository shortenRepository;
+    private final ShortenRepository shortenRepository;
+
+    public ShortenService(ShortenRepository shortenRepository) {
+        this.shortenRepository = shortenRepository;
+    }
 
     public String base62Encode(int inputNumber) {
         char[] table = base62String.toCharArray();
