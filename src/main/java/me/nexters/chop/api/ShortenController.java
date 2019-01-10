@@ -2,6 +2,7 @@ package me.nexters.chop.api;
 
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.service.ShortenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -20,7 +21,7 @@ public class ShortenController {
 
     @PostMapping("/chop/v1/shorten")
     public Url shortenUrl(@RequestBody Map<String,String> requestBody) {
-        String longUrl = requestBody.get("longUrl");
-        return shortenService.save(longUrl);
+        String originUrl = requestBody.get("originUrl");
+        return shortenService.save(originUrl);
     }
 }

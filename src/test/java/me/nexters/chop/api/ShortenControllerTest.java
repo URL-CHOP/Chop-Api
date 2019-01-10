@@ -2,7 +2,7 @@ package me.nexters.chop.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.nexters.chop.domain.url.Url;
-import me.nexters.chop.dto.url.UrlSaveRequestDto;
+import me.nexters.chop.dto.url.UrlRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,8 +35,8 @@ class ShortenControllerTest {
 
     private ObjectMapper objectMapper;
 
-    @Value("${string.longUrl}")
-    private String longUrl;
+    @Value("${string.originUrl}")
+    private String originUrl;
 
     @Value("${string.shortUrl}")
     private String shortUrl;
@@ -51,8 +52,8 @@ class ShortenControllerTest {
 
     @Test
     public void saveUrl_Success() throws Exception {
-        UrlSaveRequestDto dto = UrlSaveRequestDto.builder()
-                .longUrl(longUrl)
+        UrlRequestDto dto = UrlRequestDto.builder()
+                .originUrl(originUrl)
                 .shortUrl(shortUrl)
                 .build();
 
@@ -68,7 +69,7 @@ class ShortenControllerTest {
 
         Url url = objectMapper.readValue(result, Url.class);
 
-        assertEquals(longUrl, url.getLongUrl());
+        assertEquals(originUrl, url.getOriginUrl());
         assertEquals(true, url.getShortUrl().matches(base62matchPattern));
     }
 }

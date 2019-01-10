@@ -22,17 +22,17 @@ public class RedirectServiceTest {
     private RedirectRepository redirectRepository;
 
     private String shortenUrl;
-    private String expectedLongUrl;
+    private String expectedOriginUrl;
 
     @BeforeEach
     public void setUp() {
         shortenUrl = "a";
-        expectedLongUrl = "https://namu.wiki/w/%EC%B9%98%ED%82%A8";
+        expectedOriginUrl = "https://namu.wiki/w/%EC%B9%98%ED%82%A8";
     }
 
-    @Test
+    @Test()
     public void findUrlByShortUrl_isSuccess() {
         Url returnedUrl = redirectRepository.findUrlByShortUrl(shortenUrl);
-        assertEquals(expectedLongUrl, returnedUrl.getLongUrl());
+        assertEquals(expectedOriginUrl, returnedUrl.getOriginUrl());
     }
 }

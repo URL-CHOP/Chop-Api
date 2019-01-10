@@ -1,7 +1,7 @@
 package me.nexters.chop.service;
 
 import me.nexters.chop.domain.url.Url;
-import me.nexters.chop.dto.url.UrlSaveRequestDto;
+import me.nexters.chop.dto.url.UrlRequestDto;
 import me.nexters.chop.repository.ShortenRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,8 +29,8 @@ public class ShortenServiceTest {
     @Value("${string.base62matchPattern}")
     private String base62matchPattern;
 
-    @Value("${string.longUrl}")
-    private String longUrl;
+    @Value("${string.originUrl}")
+    private String originUrl;
 
     @Value("${string.shortUrl}")
     private String shortUrl;
@@ -42,19 +42,19 @@ public class ShortenServiceTest {
 
     @Test
     public void save_SaveSuccess() {
-        UrlSaveRequestDto requestDto = UrlSaveRequestDto.builder()
-                .longUrl(longUrl)
+        UrlRequestDto requestDto = UrlRequestDto.builder()
+                .originUrl(originUrl)
                 .shortUrl(shortUrl)
                 .build();
 
         Url url = shortenRepository.save(requestDto.toEntity());
 
-        assertEquals(url.getLongUrl(), longUrl);
+        assertEquals(url.getOriginUrl(), originUrl);
     }
 
     @Test
-    public void save_EmptyLongUrl_DataIntegrityViolationException() {
-        UrlSaveRequestDto requestDto = UrlSaveRequestDto.builder()
+    public void save_EmptyOriginUrl_DataIntegrityViolationException() {
+        UrlRequestDto requestDto = UrlRequestDto.builder()
                 .build();
 
         assertThrows(DataIntegrityViolationException.class, () ->

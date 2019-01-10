@@ -26,10 +26,10 @@ public class RedirectController {
     @GetMapping("/{shortenUrl}")
     public ResponseEntity<Url> redirect(@PathVariable String shortenUrl) {
         Url url = redirectService.redirect(shortenUrl);
-        String longUrl = url.getLongUrl();
+        String originUrl = url.getOriginUrl();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(longUrl));
+        headers.setLocation(URI.create(originUrl));
 
         return new ResponseEntity(url, headers, HttpStatus.MOVED_PERMANENTLY);
     }
