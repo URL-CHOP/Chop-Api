@@ -51,6 +51,7 @@ class ShortenControllerTest {
     }
 
     @Test
+    @Transactional
     public void saveUrl_Success() throws Exception {
         UrlRequestDto dto = UrlRequestDto.builder()
                 .originUrl(originUrl)
