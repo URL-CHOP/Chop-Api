@@ -1,7 +1,6 @@
 package me.nexters.chop.service;
 
 import me.nexters.chop.domain.url.Url;
-import me.nexters.chop.dto.url.UrlRequestDto;
 import me.nexters.chop.repository.ShortenRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,23 +43,23 @@ public class ShortenServiceTest {
     @Test
     @Transactional
     public void save_SaveSuccess() {
-        UrlRequestDto requestDto = UrlRequestDto.builder()
+        Url url = Url.builder()
                 .originUrl(originUrl)
                 .shortUrl(shortUrl)
                 .build();
 
-        Url url = shortenRepository.save(requestDto.toEntity());
+        Url responseUrl = shortenRepository.save(url);
 
-        assertEquals(url.getOriginUrl(), originUrl);
+        assertEquals(responseUrl.getOriginUrl(), originUrl);
     }
 
     @Test
     public void save_EmptyOriginUrl_DataIntegrityViolationException() {
-        UrlRequestDto requestDto = UrlRequestDto.builder()
+        Url url = Url.builder()
                 .build();
 
         assertThrows(DataIntegrityViolationException.class, () ->
-            shortenRepository.save(requestDto.toEntity())
+            shortenRepository.save(url)
         );
     }
 }
