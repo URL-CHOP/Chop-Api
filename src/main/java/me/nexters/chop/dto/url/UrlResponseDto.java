@@ -4,17 +4,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 /**
  * @author junho.park
  */
 @NoArgsConstructor
 @Getter
-public class UrlRequestDto {
+public class UrlResponseDto {
     private String originUrl;
+    private String shortUrl;
 
     @Builder
-    public UrlRequestDto(String originUrl) {
+    public UrlResponseDto(String originUrl, String shortUrl) {
         this.originUrl = originUrl;
+        this.shortUrl = shortUrl;
     }
 }
