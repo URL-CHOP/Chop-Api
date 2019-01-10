@@ -6,6 +6,8 @@ import me.nexters.chop.dto.url.UrlResponseDto;
 import me.nexters.chop.service.ShortenService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @author junho.park
  */
@@ -19,7 +21,7 @@ public class ShortenController {
     }
 
     @PostMapping("/chop/v1/shorten")
-    public UrlResponseDto shortenUrl(@RequestBody UrlRequestDto dto) {
+    public UrlResponseDto shortenUrl(@Valid @RequestBody UrlRequestDto dto) {
         Url responseUrl = shortenService.save(dto);
 
         return UrlResponseDto.builder()

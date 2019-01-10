@@ -3,6 +3,9 @@ package me.nexters.chop.dto.url;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.nexters.chop.config.ValidUrl;
+
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -11,6 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class UrlRequestDto {
+    @NotNull
+    @ValidUrl
     private String originUrl;
 
     @Builder
