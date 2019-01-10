@@ -51,8 +51,7 @@ public class ShortenService {
     }
 
     @Transactional
-    public void totalCountPlus(String longUrl)
-    {
+    public void totalCountPlus(String longUrl) {
         shortenRepository.updateTotalCount(longUrl);
     }
 }

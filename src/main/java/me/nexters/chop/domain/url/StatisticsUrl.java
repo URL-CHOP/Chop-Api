@@ -13,8 +13,7 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "statistics_url")
-public class StatisticsUrl
-{
+public class StatisticsUrl {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
