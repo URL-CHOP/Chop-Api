@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import me.nexters.chop.domain.url.Url;
-import org.springframework.beans.factory.annotation.Value;
 
-import javax.validation.Valid;
 
 /**
  * @author junho.park

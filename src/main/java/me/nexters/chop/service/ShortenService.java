@@ -26,7 +26,7 @@ public class ShortenService {
 
     public String base62Encode(int inputNumber) {
         char[] table = base62String.toCharArray();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         while (inputNumber > 0) {
             sb.append(table[inputNumber % BASE62]);
@@ -37,12 +37,9 @@ public class ShortenService {
     }
 
     @Transactional
-    public Url save(String originUrl) {
+    public Url save(UrlRequestDto dto) {
         int hashNumber = findMaxIdFromDatabase();
-        UrlRequestDto dto = UrlRequestDto.builder()
-                .originUrl(originUrl)
-                .shortUrl(base62Encode(hashNumber))
-                .build();
+        String originUrl = dto.getOriginUrl();
 
         Url maybeUrl = shortenRepository.findUrlByOriginUrl(originUrl);
 
@@ -50,7 +47,12 @@ public class ShortenService {
             return maybeUrl;
         }
 
-        return shortenRepository.save(dto.toEntity());
+        Url url = Url.builder()
+                .originUrl(originUrl)
+                .shortUrl(base62Encode(hashNumber))
+                .build();
+
+        return shortenRepository.save(url);
     }
 
     @Transactional(readOnly = true)
