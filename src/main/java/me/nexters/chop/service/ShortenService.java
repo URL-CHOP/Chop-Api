@@ -35,10 +35,10 @@ public class ShortenService {
     }
 
     @Transactional
-    public Url save(String longUrl) {
+    public Url save(String originUrl) {
         int hashNumber = findMaxIdFromDatabase();
         UrlSaveRequestDto dto = UrlSaveRequestDto.builder()
-                .longUrl(longUrl)
+                .originUrl(originUrl)
                 .shortUrl(base62Encode(hashNumber))
                 .build();
 

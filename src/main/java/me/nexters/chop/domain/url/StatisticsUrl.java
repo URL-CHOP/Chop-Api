@@ -19,6 +19,7 @@ public class StatisticsUrl {
     private long id;
 
     @Column(name = "url_click_time")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date urlClickTime;
 
     @Column(name = "url_click_time_count")

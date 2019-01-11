@@ -14,8 +14,13 @@ public interface ShortenRepository extends JpaRepository<Url, Long> {
     @Query("SELECT MAX(id) FROM Url")
     long getMaxId();
 
-
     @Modifying(clearAutomatically = true)
-    @Query("update Url set totalCount=totalCount+1 where longUrl = ?1")
-    void updateTotalCount(String longUrl);
+    @Query("update Url set totalCount=totalCount+1 where originUrl = ?1")
+    void updateTotalCount(String originUrl);
+
+    @Query("select totalCount from Url where originUrl = ?1 ")
+    int findByOriginUrl(String originUrl);
+
+    @Query("select totalCount from Url where shortUrl = ?1 ")
+    int findByShortUrl(String shortUrl);
 }

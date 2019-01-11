@@ -35,7 +35,7 @@ class ShortenControllerTest {
     private ObjectMapper objectMapper;
 
     @Value("${string.longUrl}")
-    private String longUrl;
+    private String originUrl;
 
     @Value("${string.shortUrl}")
     private String shortUrl;
@@ -52,7 +52,7 @@ class ShortenControllerTest {
     @Test
     public void saveUrl_Success() throws Exception {
         UrlSaveRequestDto dto = UrlSaveRequestDto.builder()
-                .longUrl(longUrl)
+                .originUrl(originUrl)
                 .shortUrl(shortUrl)
                 .build();
 
@@ -68,7 +68,7 @@ class ShortenControllerTest {
 
         Url url = objectMapper.readValue(result, Url.class);
 
-        assertEquals(longUrl, url.getLongUrl());
+        assertEquals(originUrl, url.getOriginUrl());
         assertEquals(true, url.getShortUrl().matches(base62matchPattern));
     }
 }

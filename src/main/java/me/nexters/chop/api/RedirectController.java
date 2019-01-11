@@ -29,7 +29,7 @@ public class RedirectController {
     @GetMapping("/{shortenUrl}")
     public ResponseEntity<Url> redirect(@PathVariable String shortenUrl) {
         Url url = redirectService.redirect(shortenUrl);
-        String longUrl = url.getLongUrl();
+        String longUrl = url.getOriginUrl();
 
         shortenService.totalCountPlus(longUrl);
         HttpHeaders headers = new HttpHeaders();

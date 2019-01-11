@@ -20,7 +20,7 @@ public class Url extends BaseTime {
     private Long id;
 
     @Column(name = "origin_url", nullable = false)
-    private String longUrl;
+    private String originUrl;
 
     @Column(name = "short_url", nullable = false, unique = true)
     private String shortUrl;
@@ -29,9 +29,9 @@ public class Url extends BaseTime {
     int totalCount;
 
     @Builder
-    public Url(Long id, String longUrl, String shortUrl) {
+    public Url(Long id, String originUrl, String shortUrl) {
         this.id = id;
-        this.longUrl = longUrl;
+        this.originUrl = originUrl;
         this.shortUrl = shortUrl;
     }
 }

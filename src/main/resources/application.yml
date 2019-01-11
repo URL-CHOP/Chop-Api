@@ -16,6 +16,12 @@ spring:
     username: root
     password: nexters12
 
+    jpa:
+        show-sql : true
+        profiles:
+          hibernate:
+            format_sql : true
+
 ---
 #jpa 설정
 

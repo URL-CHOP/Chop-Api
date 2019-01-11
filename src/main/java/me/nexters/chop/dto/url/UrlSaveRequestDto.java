@@ -12,18 +12,18 @@ import me.nexters.chop.domain.url.Url;
 @NoArgsConstructor
 @Getter
 public class UrlSaveRequestDto {
-    private String longUrl;
+    private String originUrl;
     private String shortUrl;
 
     @Builder
-    public UrlSaveRequestDto(String longUrl, String shortUrl) {
-        this.longUrl = longUrl;
+    public UrlSaveRequestDto(String originUrl, String shortUrl) {
+        this.originUrl = originUrl;
         this.shortUrl = shortUrl;
     }
 
     public Url toEntity() {
         return Url.builder()
-                .longUrl(longUrl)
+                .originUrl(originUrl)
                 .shortUrl(shortUrl)
                 .build();
     }

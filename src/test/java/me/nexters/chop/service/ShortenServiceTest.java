@@ -5,12 +5,15 @@ import me.nexters.chop.dto.url.UrlSaveRequestDto;
 import me.nexters.chop.repository.ShortenRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import javax.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -20,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
+@Transactional
 @SpringBootTest
 public class ShortenServiceTest {
 
@@ -30,7 +34,7 @@ public class ShortenServiceTest {
     private String base62matchPattern;
 
     @Value("${string.longUrl}")
-    private String longUrl;
+    private String originUrl;
 
     @Value("${string.shortUrl}")
     private String shortUrl;
@@ -43,13 +47,13 @@ public class ShortenServiceTest {
     @Test
     public void save_SaveSuccess() {
         UrlSaveRequestDto requestDto = UrlSaveRequestDto.builder()
-                .longUrl(longUrl)
+                .originUrl(originUrl)
                 .shortUrl(shortUrl)
                 .build();
 
         Url url = shortenRepository.save(requestDto.toEntity());
 
-        assertEquals(url.getLongUrl(), longUrl);
+        assertEquals(url.getOriginUrl(), originUrl);
     }
 
     @Test
@@ -60,5 +64,12 @@ public class ShortenServiceTest {
         assertThrows(DataIntegrityViolationException.class, () ->
             shortenRepository.save(requestDto.toEntity())
         );
+    }
+
+    @Test
+    public void urlCountPlus() {
+        int count = shortenRepository.findByOriginUrl("https://namu.wiki/w/%EC%B9%98%ED%82%A8");
+        shortenRepository.updateTotalCount("https://namu.wiki/w/%EC%B9%98%ED%82%A8");
+        assertEquals(count+1 , shortenRepository.findByOriginUrl("https://namu.wiki/w/%EC%B9%98%ED%82%A8"));
     }
 }
