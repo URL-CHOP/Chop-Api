@@ -9,8 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,17 +25,19 @@ public class RedirectServiceTest {
     private RedirectRepository redirectRepository;
 
     private String shortenUrl;
-    private String expectedLongUrl;
+    private String expectedOriginUrl;
 
     @BeforeEach
     public void setUp() {
         shortenUrl = "a";
-        expectedLongUrl = "https://namu.wiki/w/%EC%B9%98%ED%82%A8";
+        expectedOriginUrl = "https://namu.wiki/w/%EC%B9%98%ED%82%A8";
     }
 
     @Test
+    @Transactional
     public void findUrlByShortUrl_isSuccess() {
         Url returnedUrl = redirectRepository.findUrlByShortUrl(shortenUrl);
-        assertEquals(expectedLongUrl, returnedUrl.getOriginUrl());
+
+        assertEquals(expectedOriginUrl, returnedUrl.getOriginUrl());
     }
 }

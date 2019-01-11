@@ -2,7 +2,6 @@ package me.nexters.chop.service;
 
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.repository.RedirectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,8 +9,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class RedirectService {
-    @Autowired
-    private RedirectRepository redirectRepository;
+    private final RedirectRepository redirectRepository;
+
+    public RedirectService(RedirectRepository redirectRepository) {
+        this.redirectRepository = redirectRepository;
+    }
 
     public Url redirect(String shortenUrl) {
         return redirectRepository.findUrlByShortUrl(shortenUrl);

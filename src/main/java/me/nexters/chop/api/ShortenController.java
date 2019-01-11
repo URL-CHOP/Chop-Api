@@ -1,10 +1,12 @@
 package me.nexters.chop.api;
 
 import me.nexters.chop.domain.url.Url;
+import me.nexters.chop.dto.url.UrlRequestDto;
+import me.nexters.chop.dto.url.UrlResponseDto;
 import me.nexters.chop.service.ShortenService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import javax.validation.Valid;
 
 /**
  * @author junho.park
@@ -19,8 +21,12 @@ public class ShortenController {
     }
 
     @PostMapping("/chop/v1/shorten")
-    public Url shortenUrl(@RequestBody Map<String,String> requestBody) {
-        String longUrl = requestBody.get("longUrl");
-        return shortenService.save(longUrl);
+    public UrlResponseDto shortenUrl(@Valid @RequestBody UrlRequestDto dto) {
+        Url responseUrl = shortenService.save(dto);
+
+        return UrlResponseDto.builder()
+                .shortUrl(responseUrl.getShortUrl())
+                .originUrl(responseUrl.getOriginUrl())
+                .build();
     }
 }

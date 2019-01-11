@@ -23,4 +23,7 @@ public interface ShortenRepository extends JpaRepository<Url, Long> {
 
     @Query("select totalCount from Url where shortUrl = ?1 ")
     int findByShortUrl(String shortUrl);
+
+    Url findUrlByOriginUrl(String originUrl);
+
 }

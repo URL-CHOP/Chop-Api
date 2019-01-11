@@ -22,7 +22,7 @@ public class Url extends BaseTime {
     @Column(name = "origin_url", nullable = false)
     private String originUrl;
 
-    @Column(name = "short_url", nullable = false, unique = true)
+    @Column(name = "short_url", nullable = false)
     private String shortUrl;
 
     @Column(name = "total_count",columnDefinition = "int default 0")

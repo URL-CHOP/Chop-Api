@@ -20,10 +20,12 @@ public class StatisticsService {
     }
 
     public List<String> statisticsInsert(String shortUrl, String host, String userAgent) {
+
         List<String> statisticsInformation = new ArrayList<>();
         statisticsInformation.add(String.valueOf( shortenRepository.findByShortUrl(shortUrl)) );
         statisticsInformation.add(host);
         statisticsInformation.add(userAgent);
         return statisticsInformation;
     }
+
 }

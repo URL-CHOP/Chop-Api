@@ -1,9 +1,8 @@
 package me.nexters.chop.service;
 
 import me.nexters.chop.domain.url.Url;
-import me.nexters.chop.dto.url.UrlSaveRequestDto;
+import me.nexters.chop.dto.url.UrlRequestDto;
 import me.nexters.chop.repository.ShortenRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,14 +18,17 @@ public class ShortenService {
     @Value("${string.base62}")
     private String base62String;
 
-    @Autowired
-    private ShortenRepository shortenRepository;
+    private final ShortenRepository shortenRepository;
+
+    public ShortenService(ShortenRepository shortenRepository) {
+        this.shortenRepository = shortenRepository;
+    }
 
     public String base62Encode(int inputNumber) {
         char[] table = base62String.toCharArray();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
-        while(inputNumber > 0) {
+        while (inputNumber > 0) {
             sb.append(table[inputNumber % BASE62]);
             inputNumber /= BASE62;
         }
@@ -35,14 +37,22 @@ public class ShortenService {
     }
 
     @Transactional
-    public Url save(String originUrl) {
+    public Url save(UrlRequestDto dto) {
         int hashNumber = findMaxIdFromDatabase();
-        UrlSaveRequestDto dto = UrlSaveRequestDto.builder()
+        String originUrl = dto.getOriginUrl();
+
+        Url maybeUrl = shortenRepository.findUrlByOriginUrl(originUrl);
+
+        if (maybeUrl != null) {
+            return maybeUrl;
+        }
+
+        Url url = Url.builder()
                 .originUrl(originUrl)
                 .shortUrl(base62Encode(hashNumber))
                 .build();
 
-        return shortenRepository.save(dto.toEntity());
+        return shortenRepository.save(url);
     }
 
     @Transactional(readOnly = true)
