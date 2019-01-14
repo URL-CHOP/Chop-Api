@@ -9,11 +9,11 @@ import org.springframework.http.HttpStatus;
  */
 @Getter
 @NoArgsConstructor
-public class ErrorInfo {
+class ErrorInfo {
     private HttpStatus status;
     private String message;
 
-    public ErrorInfo(HttpStatus status, String message) {
+    ErrorInfo(HttpStatus status, String message) {
         this.status = status;
         this.message = message;
     }
