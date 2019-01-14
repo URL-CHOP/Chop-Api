@@ -4,6 +4,7 @@ import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.repository.ShortenRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -20,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
+@Transactional
 @SpringBootTest
 public class ShortenServiceTest {
 
@@ -43,6 +46,7 @@ public class ShortenServiceTest {
     @Test
     @Transactional
     public void save_SaveSuccess() {
+
         Url url = Url.builder()
                 .originUrl(originUrl)
                 .shortUrl(shortUrl)
@@ -50,6 +54,7 @@ public class ShortenServiceTest {
 
         Url responseUrl = shortenRepository.save(url);
 
+        assertEquals(url.getOriginUrl(), originUrl);
         assertEquals(responseUrl.getOriginUrl(), originUrl);
     }
 
@@ -61,5 +66,12 @@ public class ShortenServiceTest {
         assertThrows(DataIntegrityViolationException.class, () ->
             shortenRepository.save(url)
         );
+    }
+
+    @Test
+    public void urlCountPlus() {
+        int count = shortenRepository.findByOriginUrl("https://namu.wiki/w/%EC%B9%98%ED%82%A8");
+        shortenRepository.updateTotalCount("https://namu.wiki/w/%EC%B9%98%ED%82%A8");
+        assertEquals(count+1 , shortenRepository.findByOriginUrl("https://namu.wiki/w/%EC%B9%98%ED%82%A8"));
     }
 }

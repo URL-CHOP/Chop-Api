@@ -69,7 +69,12 @@ class ShortenControllerTest {
 
         Url responseUrl = objectMapper.readValue(result, Url.class);
 
+
+        assertEquals(originUrl, url.getOriginUrl());
+        assertEquals(true, url.getShortUrl().matches(base62matchPattern));
+
         assertEquals(originUrl, responseUrl.getOriginUrl());
         assertEquals(true, responseUrl.getShortUrl().matches(base62matchPattern));
+
     }
 }
