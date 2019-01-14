@@ -1,5 +1,6 @@
 package me.nexters.chop.api;
 
+import me.nexters.chop.dto.stats.StatsMainResponseDto;
 import me.nexters.chop.service.StatisticsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,5 +28,16 @@ public class StatisticsController {
                              , @RequestHeader(value = "User-Agent", defaultValue = "myBrowser") String userAgent
                              , @RequestHeader(value = "Referer",required = false) String referer) {
         return statisticsService.statisticsInsert(shortUrl, host, userAgent);
+    }
+
+    @GetMapping("/chop/v1/global-count")
+    public StatsMainResponseDto mainRequest() {
+        int globalCount = statisticsService.getGlobalCount();
+
+        StatsMainResponseDto dto = StatsMainResponseDto.builder()
+                .globalCount(globalCount)
+                .build();
+
+        return dto;
     }
 }
