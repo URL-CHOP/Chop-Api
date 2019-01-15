@@ -3,6 +3,7 @@ package me.nexters.chop.service;
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.dto.url.UrlRequestDto;
 import me.nexters.chop.repository.ShortenRepository;
+import me.nexters.chop.repository.StatisticsRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +20,11 @@ public class ShortenService {
     private String base62String;
 
     private final ShortenRepository shortenRepository;
+    private final StatisticsRepository statisticsRepository;
 
-    public ShortenService(ShortenRepository shortenRepository) {
+    public ShortenService(ShortenRepository shortenRepository, StatisticsRepository statisticsRepository) {
         this.shortenRepository = shortenRepository;
+        this.statisticsRepository = statisticsRepository;
     }
 
     public String base62Encode(int inputNumber) {
@@ -62,6 +65,6 @@ public class ShortenService {
 
     @Transactional
     public void totalCountPlus(String longUrl) {
-        shortenRepository.updateTotalCount(longUrl);
+        statisticsRepository.updateTotalCount(longUrl);
     }
 }

@@ -29,9 +29,10 @@ public class Url extends BaseTime {
     int totalCount;
 
     @Builder
-    public Url(Long id, String originUrl, String shortUrl) {
+    public Url(Long id, String originUrl, String shortUrl, int totalCount) {
         this.id = id;
         this.originUrl = originUrl;
         this.shortUrl = shortUrl;
+        this.totalCount = totalCount;
     }
 }
