@@ -2,6 +2,8 @@ package me.nexters.chop.api;
 
 import me.nexters.chop.dto.stats.StatsMainResponseDto;
 import me.nexters.chop.service.StatisticsService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -30,14 +32,14 @@ public class StatisticsController {
         return statisticsService.statisticsInsert(shortUrl, host, userAgent);
     }
 
-    @GetMapping("/chop/v1/global-count")
-    public StatsMainResponseDto mainRequest() {
-        int globalCount = statisticsService.getGlobalCount();
+    @GetMapping("/chop/v1/cout")
+    public ResponseEntity<StatsMainResponseDto> mainRequest() {
+        long globalCount = statisticsService.getGlobalCount();
 
         StatsMainResponseDto dto = StatsMainResponseDto.builder()
                 .globalCount(globalCount)
                 .build();
 
-        return dto;
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 }
