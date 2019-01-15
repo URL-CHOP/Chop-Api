@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class StatsMainResponseDto {
-    private int globalCount;
+    private long globalCount;
 
     @Builder
-    public StatsMainResponseDto(int globalCount) {
+    public StatsMainResponseDto(long globalCount) {
         this.globalCount = globalCount;
     }
 }

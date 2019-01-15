@@ -31,7 +31,7 @@ public class StatisticsService {
         return statisticsInformation;
     }
 
-    public int getGlobalCount() {
-        return (int) statisticsRepository.count();
+    public long getGlobalCount() {
+        return statisticsRepository.count();
     }
 }
