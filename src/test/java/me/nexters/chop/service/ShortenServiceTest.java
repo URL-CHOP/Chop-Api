@@ -2,9 +2,9 @@ package me.nexters.chop.service;
 
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.repository.ShortenRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -69,6 +69,7 @@ public class ShortenServiceTest {
     }
 
     @Test
+    @DisplayName("originUrl 을 업데이트 이후 count 테스트")
     public void urlCountPlus() {
         int count = shortenRepository.findByOriginUrl("https://namu.wiki/w/%EC%B9%98%ED%82%A8");
         shortenRepository.updateTotalCount("https://namu.wiki/w/%EC%B9%98%ED%82%A8");

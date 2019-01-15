@@ -33,4 +33,4 @@ jpa:
 logging:
   level:
     org.hibernate.sql : debug
-    org.hibernate.type.descriptor.sql.BasicBinder : TRACE
+    org.hibernate.type.descriptor.sql : TRACE
