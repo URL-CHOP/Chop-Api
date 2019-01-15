@@ -5,7 +5,10 @@ import me.nexters.chop.repository.StatisticsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author taehoon.choi 2019-01-11
@@ -27,7 +30,12 @@ public class StatisticsService {
         List<String> statisticsInformation = new ArrayList<>();
         statisticsInformation.add(String.valueOf( statisticsRepository.findByShortUrl(shortUrl)) );
         statisticsInformation.add(host);
-        statisticsInformation.add(userAgent);
+
+        Pattern pattern = Pattern.compile("(?<os>\\([a-zA-Z]*)");
+        Matcher matcher = pattern.matcher(userAgent);
+        if (matcher.find())
+            statisticsInformation.add(matcher.group("os").replace("(",""));
+
         return statisticsInformation;
     }
 

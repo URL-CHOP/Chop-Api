@@ -29,7 +29,6 @@ public class StatisticsController {
                              , @RequestHeader(value = "Host") String host
                              , @RequestHeader(value = "User-Agent", defaultValue = "myBrowser") String userAgent
                              , @RequestHeader(value = "Referer",required = false) String referer) {
-        System.out.println(referer);
         return statisticsService.statisticsInsert(shortUrl, host, userAgent);
     }
 
