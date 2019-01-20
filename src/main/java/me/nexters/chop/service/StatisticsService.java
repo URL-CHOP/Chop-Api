@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 /**
  * @author taehoon.choi 2019-01-11
  */
+// TODO 통계 작업은 삭제 후 통계 서버로 이전해야 함
 
 @Service
 public class StatisticsService {

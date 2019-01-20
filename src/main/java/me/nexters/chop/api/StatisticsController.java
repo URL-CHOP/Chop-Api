@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author taehoon.choi 2019-01-09
  */
-
+// TODO 통계 작업은 삭제 후 통계 서버로 이전해야 함
 @RestController
 public class StatisticsController {
 
