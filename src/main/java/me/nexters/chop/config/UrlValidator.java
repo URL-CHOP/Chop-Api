@@ -8,7 +8,7 @@ import javax.validation.ConstraintValidatorContext;
  */
 public class UrlValidator implements ConstraintValidator<ValidUrl, String> {
 
-    String urlRegex = "^(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+    private String urlRegex = "^[\\s]*(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]*[\\s]*";
 
     @Override
     public void initialize(ValidUrl constraintAnnotation) {

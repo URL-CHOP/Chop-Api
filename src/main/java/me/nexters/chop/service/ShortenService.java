@@ -42,7 +42,7 @@ public class ShortenService {
     @Transactional
     public Url save(UrlRequestDto dto) {
         int hashNumber = findMaxIdFromDatabase();
-        String originUrl = dto.getOriginUrl();
+        String originUrl = dto.getOriginUrl().trim();
 
         Url maybeUrl = shortenRepository.findUrlByOriginUrl(originUrl);
 

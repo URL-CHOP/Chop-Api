@@ -1,38 +1,43 @@
 package me.nexters.chop.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.nexters.chop.domain.url.Url;
+import me.nexters.chop.dto.url.UrlRequestDto;
+import me.nexters.chop.dto.url.UrlResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author junho.park
  */
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@ActiveProfiles("test")
 @SpringBootTest
 class ShortenControllerTest {
-
-    @Autowired
-    private WebApplicationContext wac;
-
     private MockMvc mockMvc;
-
     private ObjectMapper objectMapper;
+
+    @Mock
+    ShortenController shortenController;
 
     @Value("${string.originUrl}")
     private String originUrl;
@@ -46,35 +51,30 @@ class ShortenControllerTest {
     @BeforeEach
     public void setUp() {
         objectMapper = new ObjectMapper();
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(shortenController).build();
     }
 
     @Test
-    @Transactional
-    public void saveUrl_Success() throws Exception {
-        Url url = Url.builder()
+    public void shortenUrl_IsSuccess() throws Exception {
+        UrlRequestDto requestDto = UrlRequestDto.builder()
+                .originUrl(originUrl)
+                .build();
+
+        UrlResponseDto responseDto = UrlResponseDto.builder()
                 .originUrl(originUrl)
                 .shortUrl(shortUrl)
                 .build();
 
-        String result = mockMvc.perform(post("/chop/v1/shorten")
-                .contentType("application/json;charset=UTF-8")
-                .content(objectMapper.writeValueAsString(url)))
+        given(shortenController.shortenUrl(any(UrlRequestDto.class)))
+                .willReturn(new ResponseEntity<>(responseDto, HttpStatus.OK));
+
+        mockMvc.perform(post("/chop/v1/shorten")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andDo(print())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        Url responseUrl = objectMapper.readValue(result, Url.class);
-
-
-        assertEquals(originUrl, url.getOriginUrl());
-        assertEquals(true, url.getShortUrl().matches(base62matchPattern));
-
-        assertEquals(originUrl, responseUrl.getOriginUrl());
-        assertEquals(true, responseUrl.getShortUrl().matches(base62matchPattern));
-
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.originUrl", is(originUrl)))
+                .andExpect(jsonPath("$.shortUrl", is(shortUrl)))
+                .andDo(print());
     }
 }
