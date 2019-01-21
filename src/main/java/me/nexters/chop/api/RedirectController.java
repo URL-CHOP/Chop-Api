@@ -43,6 +43,6 @@ public class RedirectController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(originUrl));
 
-        return new ResponseEntity(responseDto, headers, HttpStatus.MOVED_PERMANENTLY);
+        return new ResponseEntity<>(responseDto, headers, HttpStatus.MOVED_PERMANENTLY);
     }
 }
