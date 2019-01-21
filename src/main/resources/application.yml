@@ -7,20 +7,32 @@ string:
     aab
   base62matchPattern:
     ^([A-Za-z0-9]*)$
+---
 
 #로컬 환경
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://101.101.162.240:3306/chop?autoReconnect=true&useSSL=false&serverTimezone=UTC
+    jdbc-url: jdbc:mysql://101.101.162.240:3306/chop?autoReconnect=true&useSSL=false&serverTimezone=UTC
     username: root
     password: nexters12
 
+
+
     jpa:
         show-sql : true
+        database : default
         profiles:
           hibernate:
             format_sql : true
+---
+
+bar :
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbc-url: jdbc:mysql://statistics-bd.ci6m5mpn73xb.ap-northeast-2.rds.amazonaws.com:3306/statistics?autoReconnect=true&useSSL=false&serverTimezone=UTC
+    username: nexters
+    password: nexters12
 
 ---
 #jpa 설정
