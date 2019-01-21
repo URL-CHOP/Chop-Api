@@ -18,6 +18,13 @@ public class ApiExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public ErrorInfo handleEntityNotFoundException(EntityNotFoundException e) {
-        return new ErrorInfo(HttpStatus.NOT_FOUND,e.getMessage());
+        return new ErrorInfo(HttpStatus.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public ErrorInfo handleRuntimeException(RuntimeException e) {
+        return new ErrorInfo(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 }
