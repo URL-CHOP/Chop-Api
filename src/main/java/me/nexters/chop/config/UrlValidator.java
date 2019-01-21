@@ -2,24 +2,20 @@ package me.nexters.chop.config;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author junho.park
  */
 public class UrlValidator implements ConstraintValidator<ValidUrl, String> {
-
-    private String urlRegex = "^[\\s]*(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]*[\\s]*";
-
-    @Override
-    public void initialize(ValidUrl constraintAnnotation) {
-    }
+    private static final Pattern URL_REGEX = Pattern.compile("^[\\s]*(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]*[\\s]*");
 
     @Override
-    public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-
+    public boolean isValid(String url, ConstraintValidatorContext constraintValidatorContext) {
         constraintValidatorContext.disableDefaultConstraintViolation();
 
-        if (s.length() == 0) {
+        if (url.length() == 0) {
             constraintValidatorContext
                     .buildConstraintViolationWithTemplate("Url이 입력되지 않았습니다.")
                     .addConstraintViolation();
@@ -27,7 +23,9 @@ public class UrlValidator implements ConstraintValidator<ValidUrl, String> {
             return false;
         }
 
-        if (!s.matches(urlRegex)) {
+        Matcher matcher = URL_REGEX.matcher(url);
+
+        if (!matcher.matches()) {
             constraintValidatorContext
                     .buildConstraintViolationWithTemplate("유효한 url이 아닙니다.")
                     .addConstraintViolation();
