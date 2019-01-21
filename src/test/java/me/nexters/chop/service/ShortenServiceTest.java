@@ -47,36 +47,38 @@ public class ShortenServiceTest {
 
     @Test
     public void base62Encode_SatisfyRegex() {
-        assertEquals(true, shortUrl.matches(base62matchPattern));
+        assertThat(shortUrl.matches(base62matchPattern)).isTrue();
     }
 
     @Test
-    public void save_success() {
+    public void shorten_Success_IfOriginUrlAlreadyExists() {
         Url url = Url.builder()
                 .originUrl(originUrl)
                 .shortUrl(shortUrl)
                 .build();
 
-        given(shortenRepository.save(url)).willReturn(url);
         given(shortenRepository.findUrlByOriginUrl(originUrl)).willReturn(url);
 
         UrlRequestDto dto = UrlRequestDto.builder()
                 .originUrl(originUrl)
                 .build();
 
-        Url returnedUrl = shortenService.save(dto);
+        Url returnedUrl = shortenService.shorten(dto);
 
         assertThat(returnedUrl.getOriginUrl()).isEqualTo(originUrl);
-        verify(shortenRepository, times(1)).getMaxId();
         verify(shortenRepository, times(1)).findUrlByOriginUrl(originUrl);
     }
 
+    @Test // TODO
+    public void shorten_Success_IfOriginUrlNotExists() {
+    }
+
     @Test
-    public void saveEmptyUrl_isFailed_ThrowException() {
+    public void saveEmptyUrl_IsFailed_ThrowException() {
         UrlRequestDto dto = UrlRequestDto.builder()
                 .build();
 
-        assertThrows(NullPointerException.class, () -> shortenService.save(dto));
+        assertThrows(NullPointerException.class, () -> shortenService.shorten(dto));
     }
 
     @Test
@@ -87,7 +89,7 @@ public class ShortenServiceTest {
     }
 
     @Test
-    void findMaxIdFromDatabase_isSuccess() {
+    void findMaxIdFromDatabase_IsSuccess() {
         given(shortenRepository.getMaxId()).willReturn(1L);
 
         long maxId = shortenService.findMaxIdFromDatabase();

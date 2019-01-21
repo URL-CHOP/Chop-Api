@@ -24,7 +24,7 @@ public class ShortenController {
 
     @PostMapping("/chop/v1/shorten")
     public ResponseEntity<UrlResponseDto> shortenUrl(@Valid @RequestBody UrlRequestDto dto) {
-        Url responseUrl = shortenService.save(dto);
+        Url responseUrl = shortenService.shorten(dto);
 
         UrlResponseDto responseDto = UrlResponseDto.builder()
                 .shortUrl(responseUrl.getShortUrl())
