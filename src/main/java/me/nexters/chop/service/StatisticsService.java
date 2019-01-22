@@ -1,11 +1,13 @@
 package me.nexters.chop.service;
 
-import me.nexters.chop.repository.ShortenRepository;
-import me.nexters.chop.repository.StatisticsRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import me.nexters.chop.repository.StatisticsRepository;
 
 /**
  * @author taehoon.choi 2019-01-11
@@ -13,15 +15,10 @@ import java.util.List;
 // TODO 통계 작업은 삭제 후 통계 서버로 이전해야 함
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class StatisticsService {
 
-    private ShortenRepository shortenRepository;
-    private StatisticsRepository statisticsRepository;
-
-    public StatisticsService(ShortenRepository shortenRepository, StatisticsRepository statisticsRepository) {
-        this.shortenRepository = shortenRepository;
-        this.statisticsRepository = statisticsRepository;
-    }
+    private final StatisticsRepository statisticsRepository;
 
     public List<String> statisticsInsert(String shortUrl, String host, String userAgent) {
 
@@ -34,5 +31,9 @@ public class StatisticsService {
 
     public long getGlobalCount() {
         return statisticsRepository.count();
+    }
+
+    public void totalCountPlus(String longUrl) {
+        statisticsRepository.updateTotalCount(longUrl);
     }
 }
