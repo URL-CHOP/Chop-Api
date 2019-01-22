@@ -15,7 +15,7 @@ public class UrlValidator implements ConstraintValidator<ValidUrl, String> {
     public boolean isValid(String url, ConstraintValidatorContext constraintValidatorContext) {
         constraintValidatorContext.disableDefaultConstraintViolation();
 
-        if (url.length() == 0) {
+        if (url.isEmpty()) {
             constraintValidatorContext
                     .buildConstraintViolationWithTemplate("Url이 입력되지 않았습니다.")
                     .addConstraintViolation();
