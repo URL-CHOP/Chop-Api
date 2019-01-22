@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.dto.url.UrlRequestDto;
 import me.nexters.chop.repository.ShortenRepository;
-
+import java.util.Optional;
 
 /**
  * @author junho.park
@@ -25,15 +25,15 @@ public class ShortenService {
     private final ShortenRepository shortenRepository;
 
     @Transactional
-    public Url save(UrlRequestDto dto) {
-        int hashNumber = findMaxIdFromDatabase();
+    public Url shorten(UrlRequestDto dto) {
         String originUrl = dto.getOriginUrl().trim();
 
-        Url maybeUrl = shortenRepository.findUrlByOriginUrl(originUrl);
+        return Optional.ofNullable(shortenRepository
+                .findUrlByOriginUrl(originUrl)).orElseGet(() -> saveUrl(originUrl));
+    }
 
-        if (maybeUrl != null) {
-            return maybeUrl;
-        }
+    private Url saveUrl(String originUrl) {
+        int hashNumber = findMaxIdFromDatabase();
 
         Url url = Url.builder()
                 .originUrl(originUrl)
