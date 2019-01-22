@@ -79,6 +79,7 @@ public class ShortenServiceTest {
         assertThrows(NullPointerException.class, () -> shortenService.save(dto));
     }
 
+    /*
     @Test
     public void totalCountPlus_IsSuccess() {
         shortenService.totalCountPlus(originUrl);
@@ -95,4 +96,5 @@ public class ShortenServiceTest {
         assertThat(maxId).isEqualTo(2);
         verify(shortenRepository, times(1)).getMaxId();
     }
+    */
 }
