@@ -9,7 +9,7 @@ string:
     ^([A-Za-z0-9]*)$
 ---
 
-#로컬 환경
+#url 디비
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -26,7 +26,7 @@ spring:
           hibernate:
             format_sql : true
 ---
-
+#statistics 디비
 bar :
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

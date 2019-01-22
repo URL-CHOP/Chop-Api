@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -28,7 +29,8 @@ public class RedirectController {
     }
 
     @GetMapping("/{shortenUrl}")
-    public ResponseEntity<UrlResponseDto> redirect(@PathVariable("shortenUrl") String shortenUrl) {
+    public ResponseEntity<UrlResponseDto> redirect(@PathVariable("shortenUrl") String shortenUrl
+                                                 , @RequestHeader(value = "Referer",required = false) String referer){
         Url url = redirectService.redirect(shortenUrl);
 
         String originUrl = url.getOriginUrl();
@@ -37,8 +39,10 @@ public class RedirectController {
                 .originUrl(originUrl)
                 .shortUrl(shortenUrl)
                 .build();
-        
+
         shortenService.totalCountPlus(originUrl);
+        shortenService.statisticsInsert(referer,shortenUrl);
+
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(originUrl));
 

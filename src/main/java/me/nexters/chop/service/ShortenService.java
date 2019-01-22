@@ -1,12 +1,17 @@
 package me.nexters.chop.service;
 
+import me.nexters.chop.domain.statistics.Statistics;
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.dto.url.UrlRequestDto;
 import me.nexters.chop.repository.ShortenRepository;
 import me.nexters.chop.repository.StatisticsRepository;
+import me.nexters.chop.statistics.UrlToStatisticsRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -21,10 +26,12 @@ public class ShortenService {
 
     private final ShortenRepository shortenRepository;
     private final StatisticsRepository statisticsRepository;
+    private final UrlToStatisticsRepository urlToStatisticsRepository;
 
-    public ShortenService(ShortenRepository shortenRepository, StatisticsRepository statisticsRepository) {
+    public ShortenService(ShortenRepository shortenRepository, StatisticsRepository statisticsRepository, UrlToStatisticsRepository urlToStatisticsRepository) {
         this.shortenRepository = shortenRepository;
         this.statisticsRepository = statisticsRepository;
+        this.urlToStatisticsRepository = urlToStatisticsRepository;
     }
 
     public String base62Encode(int inputNumber) {
@@ -67,4 +74,16 @@ public class ShortenService {
     public void totalCountPlus(String longUrl) {
         statisticsRepository.updateTotalCount(longUrl);
     }
+
+    @Transactional
+    public void statisticsInsert(String referer, String shortenUrl) {
+        Statistics statistics = Statistics.builder()
+                                    .clickTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))
+                                    .referer(referer)
+                                    .shortUrl(shortenUrl)
+                                    .build();
+
+        urlToStatisticsRepository.save(statistics);
+    }
+
 }
