@@ -33,15 +33,11 @@ public class StatisticsConfig {
     @ConfigurationProperties(prefix = "bar.datasource")
     public DataSource dataSource() {
         return DataSourceBuilder.create().type(HikariDataSource.class).build();
-//        return DataSourceBuilder.create().build();
     }
 
     @Bean(name = "barEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean
-    statisticsEntityManagerFactory(
-            EntityManagerFactoryBuilder builder,
-            @Qualifier("barDataSource") DataSource dataSource
-    ) {
+    statisticsEntityManagerFactory( EntityManagerFactoryBuilder builder, @Qualifier("barDataSource") DataSource dataSource) {
         return
                 builder
                         .dataSource(dataSource)
@@ -49,11 +45,9 @@ public class StatisticsConfig {
                         .persistenceUnit("statistics")
                         .build();
     }
+
     @Bean(name = "barTransactionManager")
-    public PlatformTransactionManager barTransactionManager(
-            @Qualifier("barEntityManagerFactory") EntityManagerFactory
-                    statisticsEntityManagerFactory
-    ) {
+    public PlatformTransactionManager barTransactionManager( @Qualifier("barEntityManagerFactory") EntityManagerFactory statisticsEntityManagerFactory) {
         return new JpaTransactionManager(statisticsEntityManagerFactory);
     }
 }

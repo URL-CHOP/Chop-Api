@@ -14,7 +14,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     jdbc-url: jdbc:mysql://101.101.162.240:3306/chop?autoReconnect=true&useSSL=false&serverTimezone=UTC
-    username: root
+    username: short
     password: nexters12
 
 
