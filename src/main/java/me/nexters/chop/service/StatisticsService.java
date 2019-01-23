@@ -1,7 +1,10 @@
 package me.nexters.chop.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +28,12 @@ public class StatisticsService {
         List<String> statisticsInformation = new ArrayList<>();
         statisticsInformation.add(String.valueOf( statisticsRepository.findByShortUrl(shortUrl)) );
         statisticsInformation.add(host);
-        statisticsInformation.add(userAgent);
+
+        Pattern pattern = Pattern.compile("(?<os>\\([a-zA-Z]*)");
+        Matcher matcher = pattern.matcher(userAgent);
+        if (matcher.find())
+            statisticsInformation.add(matcher.group("os").replace("(",""));
+
         return statisticsInformation;
     }
 

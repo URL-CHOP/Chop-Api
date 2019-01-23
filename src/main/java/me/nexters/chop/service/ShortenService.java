@@ -1,9 +1,18 @@
 package me.nexters.chop.service;
 
+import me.nexters.chop.domain.statistics.Statistics;
+import me.nexters.chop.domain.url.Url;
+import me.nexters.chop.dto.url.UrlRequestDto;
+import me.nexters.chop.repository.ShortenRepository;
+import me.nexters.chop.repository.StatisticsRepository;
+import me.nexters.chop.statistics.UrlToStatisticsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import lombok.RequiredArgsConstructor;
 import me.nexters.chop.domain.url.Url;
@@ -23,6 +32,21 @@ public class ShortenService {
     private String base62String;
 
     private final ShortenRepository shortenRepository;
+    private final StatisticsRepository statisticsRepository;
+    private final UrlToStatisticsRepository urlToStatisticsRepository;
+
+
+    public String base62Encode(int inputNumber) {
+        char[] table = base62String.toCharArray();
+        StringBuilder sb = new StringBuilder();
+
+        while (inputNumber > 0) {
+            sb.append(table[inputNumber % BASE62]);
+            inputNumber /= BASE62;
+        }
+
+        return sb.toString();
+    }
 
     @Transactional
     public Url shorten(UrlRequestDto dto) {
@@ -43,19 +67,19 @@ public class ShortenService {
         return shortenRepository.save(url);
     }
 
-    private String base62Encode(int inputNumber) {
-        char[] table = base62String.toCharArray();
-        StringBuilder sb = new StringBuilder();
-
-        while (inputNumber > 0) {
-            sb.append(table[inputNumber % BASE62]);
-            inputNumber /= BASE62;
-        }
-
-        return sb.toString();
-    }
-
     private int findMaxIdFromDatabase() {
         return (int) (shortenRepository.getMaxId() + 1);
     }
+
+    @Transactional
+    public void statisticsInsert(String referer, String shortUrl) {
+        Statistics statistics = Statistics.builder()
+                                    .clickTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))
+                                    .referer(referer)
+                                    .shortUrl(shortUrl)
+                                    .build();
+
+        urlToStatisticsRepository.save(statistics);
+    }
+
 }
