@@ -1,9 +1,9 @@
 package me.nexters.chop.api;
 
-import me.nexters.chop.domain.url.Url;
-import me.nexters.chop.dto.url.UrlResponseDto;
-import me.nexters.chop.service.RedirectService;
+import java.net.URI;
+
 import me.nexters.chop.service.ShortenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,21 +12,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
+import lombok.RequiredArgsConstructor;
+import me.nexters.chop.domain.url.Url;
+import me.nexters.chop.dto.url.UrlResponseDto;
+import me.nexters.chop.service.RedirectService;
+import me.nexters.chop.service.StatisticsService;
 
 /**
  * @author junho.park
  */
 @RestController
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RedirectController {
 
     private final RedirectService redirectService;
+    private final StatisticsService statisticsService;
     private final ShortenService shortenService;
-
-    public RedirectController(RedirectService redirectService, ShortenService shortenService) {
-        this.redirectService = redirectService;
-        this.shortenService = shortenService;
-    }
 
     @GetMapping("/{shortenUrl}")
     public ResponseEntity<UrlResponseDto> redirect(@PathVariable("shortenUrl") String shortenUrl
@@ -40,9 +41,8 @@ public class RedirectController {
                 .shortUrl(shortenUrl)
                 .build();
 
-        shortenService.totalCountPlus(originUrl);
         shortenService.statisticsInsert(referer,shortenUrl);
-
+        statisticsService.totalCountPlus(originUrl);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(originUrl));
