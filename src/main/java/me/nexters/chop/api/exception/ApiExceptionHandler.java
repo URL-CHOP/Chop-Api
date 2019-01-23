@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.persistence.EntityNotFoundException;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author junho.park
  */
+@Slf4j
 @ControllerAdvice
 public class ApiExceptionHandler {
 
@@ -25,6 +28,7 @@ public class ApiExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ErrorDetail handleRuntimeException(RuntimeException e) {
+        log.error("runtime exception : ", e);
         return new ErrorDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 }
