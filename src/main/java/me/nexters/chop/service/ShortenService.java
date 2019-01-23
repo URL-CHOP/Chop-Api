@@ -35,6 +35,7 @@ public class ShortenService {
     private final StatisticsRepository statisticsRepository;
     private final UrlToStatisticsRepository urlToStatisticsRepository;
 
+
     public String base62Encode(int inputNumber) {
         char[] table = base62String.toCharArray();
         StringBuilder sb = new StringBuilder();
@@ -66,17 +67,16 @@ public class ShortenService {
         return shortenRepository.save(url);
     }
 
-
     private int findMaxIdFromDatabase() {
         return (int) (shortenRepository.getMaxId() + 1);
     }
 
     @Transactional
-    public void statisticsInsert(String referer, String shortenUrl) {
+    public void statisticsInsert(String referer, String shortUrl) {
         Statistics statistics = Statistics.builder()
                                     .clickTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))
                                     .referer(referer)
-                                    .shortUrl(shortenUrl)
+                                    .shortUrl(shortUrl)
                                     .build();
 
         urlToStatisticsRepository.save(statistics);
