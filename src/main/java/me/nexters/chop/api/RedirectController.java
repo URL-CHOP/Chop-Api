@@ -43,6 +43,7 @@ public class RedirectController {
         shortenService.totalCountPlus(originUrl);
         shortenService.statisticsInsert(referer,shortenUrl);
 
+
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(originUrl));
 
