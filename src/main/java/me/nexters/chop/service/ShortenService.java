@@ -35,12 +35,6 @@ public class ShortenService {
     private final StatisticsRepository statisticsRepository;
     private final UrlToStatisticsRepository urlToStatisticsRepository;
 
-//    public ShortenService(ShortenRepository shortenRepository, StatisticsRepository statisticsRepository, UrlToStatisticsRepository urlToStatisticsRepository) {
-//        this.shortenRepository = shortenRepository;
-//        this.statisticsRepository = statisticsRepository;
-//        this.urlToStatisticsRepository = urlToStatisticsRepository;
-//    }
-
     public String base62Encode(int inputNumber) {
         char[] table = base62String.toCharArray();
         StringBuilder sb = new StringBuilder();
