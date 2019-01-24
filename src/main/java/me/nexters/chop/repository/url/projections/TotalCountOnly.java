@@ -1,4 +1,4 @@
-package me.nexters.chop.repository.projections;
+package me.nexters.chop.repository.url.projections;
 
 /**
  * @author junho.park

@@ -1,4 +1,4 @@
-package me.nexters.chop.repository;
+package me.nexters.chop.repository.url;
 
 import me.nexters.chop.domain.url.Url;
 import org.springframework.data.jpa.repository.JpaRepository;

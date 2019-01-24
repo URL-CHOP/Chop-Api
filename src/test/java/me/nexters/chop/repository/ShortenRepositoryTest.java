@@ -1,6 +1,7 @@
 package me.nexters.chop.repository;
 
 import me.nexters.chop.domain.url.Url;
+import me.nexters.chop.repository.url.ShortenRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
