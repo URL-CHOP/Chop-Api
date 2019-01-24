@@ -1,36 +1,21 @@
 package me.nexters.chop.api;
 
+import lombok.RequiredArgsConstructor;
 import me.nexters.chop.dto.stats.StatsMainResponseDto;
 import me.nexters.chop.service.StatisticsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @author taehoon.choi 2019-01-09
  */
-// TODO 통계 작업은 삭제 후 통계 서버로 이전해야 함
 @RestController
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class StatisticsController {
-
     private final StatisticsService statisticsService;
-
-    public StatisticsController(StatisticsService statisticsService) {
-        this.statisticsService = statisticsService;
-    }
-
-    @GetMapping("/statistics/{shortUrl}")
-    public List<String> httpHeader(@PathVariable("shortUrl") String shortUrl
-                             , @RequestHeader(value = "Host") String host
-                             , @RequestHeader(value = "User-Agent", defaultValue = "myBrowser") String userAgent
-                             , @RequestHeader(value = "Referer",required = false) String referer) {
-        return statisticsService.statisticsInsert(shortUrl, host, userAgent);
-    }
 
     @GetMapping("/chop/v1/cout")
     public ResponseEntity<StatsMainResponseDto> mainRequest() {
