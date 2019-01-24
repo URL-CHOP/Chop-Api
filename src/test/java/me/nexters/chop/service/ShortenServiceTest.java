@@ -2,11 +2,9 @@ package me.nexters.chop.service;
 
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.dto.url.UrlRequestDto;
-import me.nexters.chop.repository.ShortenRepository;
+import me.nexters.chop.repository.url.ShortenRepository;
 
-import org.junit.jupiter.api.DisplayName;
-
-import me.nexters.chop.repository.StatisticsRepository;
+import me.nexters.chop.repository.url.StatisticsRepository;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,9 +29,6 @@ import static org.mockito.Mockito.verify;
 @ActiveProfiles("test")
 @SpringBootTest
 public class ShortenServiceTest {
-    @Mock
-    private StatisticsRepository statisticsRepository;
-
     @Mock
     private ShortenRepository shortenRepository;
 
@@ -84,31 +79,4 @@ public class ShortenServiceTest {
 
         assertThrows(NullPointerException.class, () -> shortenService.shorten(dto));
     }
-
-    /*
-    @Test
-
-    @DisplayName("originUrl 을 업데이트 이후 count 테스트")
-    public void urlCountPlus() {
-//        int count = statisticsRepository.findByOriginUrl("https://namu.wiki/w/%EC%B9%98%ED%82%A8");
-//        statisticsRepository.updateTotalCount("https://namu.wiki/w/%EC%B9%98%ED%82%A8");
-//        assertEquals(count + 1, statisticsRepository.findByOriginUrl("https://namu.wiki/w/%EC%B9%98%ED%82%A8"));
-    }
-
-    public void totalCountPlus_IsSuccess() {
-        shortenService.totalCountPlus(originUrl);
-
-        verify(statisticsRepository, times(1)).updateTotalCount(originUrl);
-    }
-
-    @Test
-    void findMaxIdFromDatabase_IsSuccess() {
-        given(shortenRepository.getMaxId()).willReturn(1L);
-
-        long maxId = shortenService.findMaxIdFromDatabase();
-
-        assertThat(maxId).isEqualTo(2);
-        verify(shortenRepository, times(1)).getMaxId();
-    }
-    */
 }

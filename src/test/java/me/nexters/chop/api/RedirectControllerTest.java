@@ -54,7 +54,7 @@ class RedirectControllerTest {
         given(redirectController.redirect(shortUrl,""))
                 .willReturn(new ResponseEntity<>(responseDto, HttpStatus.MOVED_PERMANENTLY));
 
-        mockMvc.perform(get("/{shortenUrl}", shortUrl))
+        mockMvc.perform(get("/{shortenUrl}", shortUrl).header("Referer", ""))
                 .andExpect(status().is3xxRedirection())
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
