@@ -1,11 +1,12 @@
 package me.nexters.chop.service;
 
+import lombok.RequiredArgsConstructor;
 import me.nexters.chop.domain.statistics.Statistics;
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.dto.url.UrlRequestDto;
-import me.nexters.chop.repository.ShortenRepository;
-import me.nexters.chop.repository.StatisticsRepository;
-import me.nexters.chop.statistics.UrlToStatisticsRepository;
+import me.nexters.chop.repository.url.GlobalCountRepository;
+import me.nexters.chop.repository.url.ShortenRepository;
+import me.nexters.chop.repository.statistics.UrlToStatisticsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,11 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import lombok.RequiredArgsConstructor;
-import me.nexters.chop.domain.url.Url;
-import me.nexters.chop.dto.url.UrlRequestDto;
-import me.nexters.chop.repository.ShortenRepository;
 import java.util.Optional;
 
 /**
@@ -32,11 +28,10 @@ public class ShortenService {
     private String base62String;
 
     private final ShortenRepository shortenRepository;
-    private final StatisticsRepository statisticsRepository;
     private final UrlToStatisticsRepository urlToStatisticsRepository;
+    private final GlobalCountRepository globalCountRepository;
 
-
-    public String base62Encode(int inputNumber) {
+    private String base62Encode(int inputNumber) {
         char[] table = base62String.toCharArray();
         StringBuilder sb = new StringBuilder();
 
@@ -80,6 +75,11 @@ public class ShortenService {
                                     .build();
 
         urlToStatisticsRepository.save(statistics);
+    }
+
+    @Transactional
+    public void updateTotalUrlCount() {
+        globalCountRepository.updateTotalCount();
     }
 
 }

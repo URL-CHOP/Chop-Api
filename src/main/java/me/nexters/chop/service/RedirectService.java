@@ -7,7 +7,7 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import me.nexters.chop.domain.url.Url;
-import me.nexters.chop.repository.RedirectRepository;
+import me.nexters.chop.repository.url.RedirectRepository;
 
 /**
  * @author junho.park
