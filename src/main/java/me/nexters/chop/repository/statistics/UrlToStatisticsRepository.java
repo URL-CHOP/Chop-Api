@@ -1,4 +1,4 @@
-package me.nexters.chop.statistics;
+package me.nexters.chop.repository.statistics;
 
 import me.nexters.chop.domain.statistics.Statistics;
 import org.springframework.data.jpa.repository.JpaRepository;
