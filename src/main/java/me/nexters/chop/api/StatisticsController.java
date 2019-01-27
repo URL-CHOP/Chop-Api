@@ -1,5 +1,7 @@
 package me.nexters.chop.api;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.nexters.chop.dto.stats.StatsMainResponseDto;
 import me.nexters.chop.service.StatisticsService;
@@ -14,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Api(description = "통계 api")
 public class StatisticsController {
     private final StatisticsService statisticsService;
 
     @GetMapping("/chop/v1/cout")
+    @ApiOperation(value = "단축 Url 갯수 반환", notes = "여태까지 단축된 Url의 갯수를 반환한다", response = StatsMainResponseDto.class)
     public ResponseEntity<StatsMainResponseDto> mainRequest() {
         long globalCount = statisticsService.getGlobalCount();
 
