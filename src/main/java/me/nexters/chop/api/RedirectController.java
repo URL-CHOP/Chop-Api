@@ -2,6 +2,8 @@ package me.nexters.chop.api;
 
 import java.net.URI;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import me.nexters.chop.service.ShortenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +25,7 @@ import me.nexters.chop.service.StatisticsService;
  */
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Api(description = "리다이렉트 api")
 public class RedirectController {
 
     private final RedirectService redirectService;
@@ -30,6 +33,7 @@ public class RedirectController {
     private final ShortenService shortenService;
 
     @GetMapping("/{shortenUrl}")
+    @ApiOperation(value = "Url 리다이렉트", notes = "단축 Url을 리다이렉트 해준다", response = UrlResponseDto.class)
     public ResponseEntity<UrlResponseDto> redirect(@PathVariable("shortenUrl") String shortenUrl
                                                  , @RequestHeader(value = "Referer",required = false) String referer){
         Url url = redirectService.redirect(shortenUrl);
