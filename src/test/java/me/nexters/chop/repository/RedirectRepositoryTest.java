@@ -2,6 +2,7 @@ package me.nexters.chop.repository;
 
 
 import me.nexters.chop.domain.url.Url;
+import me.nexters.chop.repository.url.RedirectRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

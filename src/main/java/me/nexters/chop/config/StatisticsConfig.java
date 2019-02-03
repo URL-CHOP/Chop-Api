@@ -1,8 +1,7 @@
-package me.nexters.chop;
+package me.nexters.chop.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -25,7 +24,7 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(
         entityManagerFactoryRef = "barEntityManagerFactory",
         transactionManagerRef = "barTransactionManager",
-        basePackages = {"me.nexters.chop.statistics"}
+        basePackages = {"me.nexters.chop.repository.statistics"}
 )
 public class StatisticsConfig {
 
