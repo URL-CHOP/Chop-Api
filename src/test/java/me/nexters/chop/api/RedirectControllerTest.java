@@ -51,10 +51,12 @@ class RedirectControllerTest {
                 .shortUrl(shortUrl)
                 .build();
 
-        given(redirectController.redirect(shortUrl,""))
+        given(redirectController.redirect(shortUrl,"https://google.com", "mobile"))
                 .willReturn(new ResponseEntity<>(responseDto, HttpStatus.MOVED_PERMANENTLY));
 
-        mockMvc.perform(get("/{shortenUrl}", shortUrl).header("Referer", ""))
+        mockMvc.perform(get("/{shortenUrl}", shortUrl)
+                .header("Referer", "https://google.com")
+                .header("User-Agent", "mobile"))
                 .andExpect(status().is3xxRedirection())
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
