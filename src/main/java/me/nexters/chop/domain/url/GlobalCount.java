@@ -1,5 +1,6 @@
 package me.nexters.chop.domain.url;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.nexters.chop.domain.BaseTime;
@@ -11,6 +12,7 @@ import javax.persistence.*;
  */
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor(staticName = "of")
 @Getter
 @Table(name = "global_count")
 public class GlobalCount {
@@ -20,4 +22,8 @@ public class GlobalCount {
 
     @Column(name = "global_count")
     int globalCount;
+
+    public static GlobalCount empty() {
+        return GlobalCount.of(0L, 0);
+    }
 }

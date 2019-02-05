@@ -1,10 +1,9 @@
 package me.nexters.chop.service;
 
-import me.nexters.chop.domain.url.Url;
-import me.nexters.chop.dto.url.UrlRequestDto;
-import me.nexters.chop.repository.url.ShortenRepository;
-
-import me.nexters.chop.repository.url.StatisticsRepository;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,12 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import me.nexters.chop.domain.url.Url;
+import me.nexters.chop.dto.url.UrlRequestDto;
+import me.nexters.chop.repository.url.ShortenRepository;
 
 /**
  * @author junho.park
