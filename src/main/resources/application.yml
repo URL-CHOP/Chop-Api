@@ -17,8 +17,6 @@ spring:
     username: short
     password: nexters12
 
-
-
     jpa:
         show-sql : true
         database : default
