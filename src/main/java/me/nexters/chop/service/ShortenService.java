@@ -1,6 +1,7 @@
 package me.nexters.chop.service;
 
 import lombok.RequiredArgsConstructor;
+import me.nexters.chop.domain.url.GlobalCount;
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.dto.url.UrlRequestDto;
 import me.nexters.chop.repository.url.GlobalCountRepository;
@@ -66,4 +67,9 @@ public class ShortenService {
         globalCountRepository.updateTotalCount();
     }
 
+    public long getGlobalCount() {
+        return globalCountRepository.findById(1L)
+            .orElse(GlobalCount.empty())
+            .getGlobalCount();
+    }
 }

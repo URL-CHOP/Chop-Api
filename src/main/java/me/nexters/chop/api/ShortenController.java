@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.nexters.chop.domain.url.Url;
+import me.nexters.chop.dto.stats.StatsMainResponseDto;
 import me.nexters.chop.dto.url.UrlRequestDto;
 import me.nexters.chop.dto.url.UrlResponseDto;
 import me.nexters.chop.service.ShortenService;
@@ -36,5 +37,17 @@ public class ShortenController {
                 .build();
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/chop/v1/count")
+    @ApiOperation(value = "단축 Url 갯수 반환", notes = "여태까지 단축된 Url의 갯수를 반환한다", response = StatsMainResponseDto.class)
+    public ResponseEntity<StatsMainResponseDto> globalCount() {
+        long globalCount = shortenService.getGlobalCount();
+
+        StatsMainResponseDto dto = StatsMainResponseDto.builder()
+            .globalCount(globalCount)
+            .build();
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 }

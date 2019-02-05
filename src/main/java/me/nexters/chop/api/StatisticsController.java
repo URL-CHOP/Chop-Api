@@ -11,7 +11,7 @@ import me.nexters.chop.dto.stats.StatsTotalResponseDto;
 import me.nexters.chop.grpc.Platform;
 import me.nexters.chop.grpc.Referer;
 import me.nexters.chop.grpc.TotalCount;
-import me.nexters.chop.service.StatisticsService;
+import me.nexters.chop.service.ShortenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Api(description = "통계 api")
 public class StatisticsController {
-    private final StatisticsService statisticsService;
     private final ChopGrpcClient grpcClient;
+    private final ShortenService shortenService;
 
     @GetMapping("/chop/v1/cout")
     @ApiOperation(value = "단축 Url 갯수 반환", notes = "여태까지 단축된 Url의 갯수를 반환한다", response = StatsMainResponseDto.class)
     public ResponseEntity<StatsMainResponseDto> mainRequest() {
-        long globalCount = statisticsService.getGlobalCount();
+        long globalCount = shortenService.getGlobalCount();
 
         StatsMainResponseDto dto = StatsMainResponseDto.builder()
                 .globalCount(globalCount)

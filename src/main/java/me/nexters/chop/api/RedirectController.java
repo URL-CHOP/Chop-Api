@@ -7,7 +7,6 @@ import me.nexters.chop.api.grpc.ChopGrpcClient;
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.dto.url.UrlResponseDto;
 import me.nexters.chop.service.RedirectService;
-import me.nexters.chop.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
+
 /**
  * @author junho.park
  */
@@ -28,7 +28,6 @@ import java.net.URI;
 @Api(description = "리다이렉트 api")
 public class RedirectController {
     private final RedirectService redirectService;
-    private final StatisticsService statisticsService;
     private final ChopGrpcClient grpcClient;
 
     @Value("${string.base62}")
@@ -39,6 +38,7 @@ public class RedirectController {
     public ResponseEntity<UrlResponseDto> redirect(@PathVariable("shortenUrl") String shortenUrl,
                                                    @RequestHeader(value = "Referer",required = false, defaultValue = "none") String referer,
                                                    @RequestHeader(value = "User-Agent", defaultValue = "myBrowser") String userAgent){
+
         Url url = redirectService.redirect(shortenUrl);
 
         String originUrl = url.getOriginUrl();
@@ -50,8 +50,6 @@ public class RedirectController {
 
         // gRPC 비동기 호출
         grpcClient.insertStatsToStatsServer(shortenUrl, referer, userAgent);
-
-        statisticsService.totalCountPlus(originUrl);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(originUrl));
