@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class GrpcConfig {
     @Bean
     public ManagedChannel setChannel() {
-        return ManagedChannelBuilder.forAddress("localhost", 6565)
+        return ManagedChannelBuilder.forAddress("49.236.136.19", 6565)
                 .usePlaintext().build();
     }
 }

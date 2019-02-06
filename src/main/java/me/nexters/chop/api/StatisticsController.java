@@ -11,7 +11,7 @@ import me.nexters.chop.dto.stats.StatsTotalResponseDto;
 import me.nexters.chop.grpc.Platform;
 import me.nexters.chop.grpc.Referer;
 import me.nexters.chop.grpc.TotalCount;
-import me.nexters.chop.service.ShortenService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,59 +26,46 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Api(description = "통계 api")
 public class StatisticsController {
-    private final ChopGrpcClient grpcClient;
-    private final ShortenService shortenService;
+	private final ChopGrpcClient grpcClient;
 
-    @GetMapping("/chop/v1/cout")
-    @ApiOperation(value = "단축 Url 갯수 반환", notes = "여태까지 단축된 Url의 갯수를 반환한다", response = StatsMainResponseDto.class)
-    public ResponseEntity<StatsMainResponseDto> mainRequest() {
-        long globalCount = shortenService.getGlobalCount();
+	@GetMapping("/chop/v1/platform/{shortenUrl}")
+	@ApiOperation(value = "해당 url platform 반환", notes = "해당 url의 mobile, browser 카운트를 반환한다.", response = StatsMainResponseDto.class)
+	public ResponseEntity<StatsPlatformResponseDto> platformRequest(@PathVariable("shortenUrl") String shortenUrl) {
+		Platform platform = grpcClient.getPlatformStats(shortenUrl);
 
-        StatsMainResponseDto dto = StatsMainResponseDto.builder()
-                .globalCount(globalCount)
-                .build();
+		StatsPlatformResponseDto dto = StatsPlatformResponseDto.builder()
+			.shortUrl(platform.getShortUrl())
+			.mobile(platform.getMobile())
+			.browser(platform.getBrowser())
+			.build();
 
-        return new ResponseEntity<>(dto, HttpStatus.OK);
-    }
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
 
-    @GetMapping("/chop/v1/platform/{shortenUrl}")
-    @ApiOperation(value = "해당 url platform 반환", notes = "해당 url의 mobile, browser 카운트를 반환한다.", response = StatsMainResponseDto.class)
-    public ResponseEntity<StatsPlatformResponseDto> platformRequest(@PathVariable("shortenUrl") String shortenUrl) {
-        Platform platform = grpcClient.getPlatformStats(shortenUrl);
+	@GetMapping("/chop/v1/referer/{shortenUrl}")
+	@ApiOperation(value = "해당 url referer 반환", notes = "해당 url의 referer 카운트를 반환한다.", response = StatsMainResponseDto.class)
+	public ResponseEntity<StatsRefererResponseDto> refererRequest(@PathVariable("shortenUrl") String shortenUrl) {
+		Referer referer = grpcClient.getRefererStats(shortenUrl);
 
-        StatsPlatformResponseDto dto = StatsPlatformResponseDto.builder()
-                .shortUrl(platform.getShortUrl())
-                .mobile(platform.getMobile())
-                .browser(platform.getBrowser())
-                .build();
+		StatsRefererResponseDto dto = StatsRefererResponseDto.builder()
+			.shortUrl(referer.getShortUrl())
+			.referer(referer.getRefererList())
+			.count(referer.getCountList())
+			.build();
 
-        return new ResponseEntity<>(dto, HttpStatus.OK);
-    }
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
 
-    @GetMapping("/chop/v1/referer/{shortenUrl}")
-    @ApiOperation(value = "해당 url referer 반환", notes = "해당 url의 referer 카운트를 반환한다.", response = StatsMainResponseDto.class)
-    public ResponseEntity<StatsRefererResponseDto> refererRequest(@PathVariable("shortenUrl") String shortenUrl) {
-        Referer referer = grpcClient.getRefererStats(shortenUrl);
+	@GetMapping("/chop/v1/totalcount/{shortenUrl}")
+	@ApiOperation(value = "해당 url 총 클릭수 반환", notes = "해당 url의 총 클릭수를 반환한다.", response = StatsMainResponseDto.class)
+	public ResponseEntity<StatsTotalResponseDto> totalCountRequest(@PathVariable("shortenUrl") String shortenUrl) {
+		TotalCount totalCount = grpcClient.getTotalCount(shortenUrl);
 
-        StatsRefererResponseDto dto = StatsRefererResponseDto.builder()
-                .shortUrl(referer.getShortUrl())
-                .referer(referer.getRefererList())
-                .count(referer.getCountList())
-                .build();
+		StatsTotalResponseDto dto = StatsTotalResponseDto.builder()
+			.shortUrl(totalCount.getShortUrl())
+			.totalCount(totalCount.getTotalCount())
+			.build();
 
-        return new ResponseEntity<>(dto, HttpStatus.OK);
-    }
-
-    @GetMapping("/chop/v1/totalcount/{shortenUrl}")
-    @ApiOperation(value = "해당 url 총 클릭수 반환", notes = "해당 url의 총 클릭수를 반환한다.", response = StatsMainResponseDto.class)
-    public ResponseEntity<StatsTotalResponseDto> totalCountRequest(@PathVariable("shortenUrl") String shortenUrl) {
-        TotalCount totalCount = grpcClient.getTotalCount(shortenUrl);
-
-        StatsTotalResponseDto dto = StatsTotalResponseDto.builder()
-                .shortUrl(totalCount.getShortUrl())
-                .totalCount(totalCount.getTotalCount())
-                .build();
-
-        return new ResponseEntity<>(dto, HttpStatus.OK);
-    }
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
 }
