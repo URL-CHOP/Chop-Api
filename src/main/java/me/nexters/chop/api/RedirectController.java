@@ -30,7 +30,7 @@ public class RedirectController {
 	private final RedirectService redirectService;
 	private final ChopGrpcClient grpcClient;
 
-	@CrossOrigin
+	@CrossOrigin(origins = "*")
 	@GetMapping("/{shortenUrl}")
 	@ApiOperation(value = "Url 리다이렉트", notes = "단축 Url을 리다이렉트 해준다", response = UrlResponseDto.class)
 	public ResponseEntity<UrlResponseDto> redirect(@PathVariable("shortenUrl") String shortenUrl,
