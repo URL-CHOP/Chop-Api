@@ -32,7 +32,7 @@ public class ShortenController {
         shortenService.updateTotalUrlCount();
 
         UrlResponseDto responseDto = UrlResponseDto.builder()
-                .shortUrl(responseUrl.getShortUrl())
+                .shortUrl("nexters.me/"+responseUrl.getShortUrl())
                 .originUrl(responseUrl.getOriginUrl())
                 .build();
 
