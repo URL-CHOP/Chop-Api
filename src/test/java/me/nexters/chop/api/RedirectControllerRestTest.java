@@ -27,10 +27,10 @@ public class RedirectControllerRestTest {
     @Value("${string.shortUrl}")
     private String shortUrl;
 
-//    @Test
-//    public void redirectRestTest() {
-//        ResponseEntity<UrlResponseDto> responseEntity = testRestTemplate.getForEntity("/" + shortUrl, UrlResponseDto.class);
-//        assertThat(responseEntity.getBody().getShortUrl()).isEqualTo(shortUrl);
-//        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.MOVED_PERMANENTLY);
-//    }
+    @Test
+    public void redirectRestTest() {
+        ResponseEntity<UrlResponseDto> responseEntity = testRestTemplate.getForEntity("/" + shortUrl, UrlResponseDto.class);
+        assertThat(responseEntity.getBody().getShortUrl()).isEqualTo(shortUrl);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.MOVED_PERMANENTLY);
+    }
 }
