@@ -1,7 +1,7 @@
 package me.nexters.chop.config.grpc;
 
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
+import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class GrpcConfig {
     @Bean
     public ManagedChannel setChannel() {
-        return ManagedChannelBuilder.forAddress("localhost", 6565)
+        return NettyChannelBuilder.forAddress("49.236.136.197", 6565)
                 .usePlaintext().build();
     }
 }
