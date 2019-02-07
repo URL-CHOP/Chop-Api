@@ -8,6 +8,7 @@ import me.nexters.chop.dto.stats.StatsMainResponseDto;
 import me.nexters.chop.dto.url.UrlRequestDto;
 import me.nexters.chop.dto.url.UrlResponseDto;
 import me.nexters.chop.service.ShortenService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,32 +23,35 @@ import javax.validation.Valid;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Api(description = "단축 api")
 public class ShortenController {
-    private final ShortenService shortenService;
+	private final ShortenService shortenService;
 
-    @PostMapping("/chop/v1/shorten")
-    @ApiOperation(value = "Url 단축", notes = "Url을 단축하여 반환한다", response = UrlRequestDto.class)
-    public ResponseEntity<UrlResponseDto> shortenUrl(@Valid @RequestBody UrlRequestDto dto) {
-        Url responseUrl = shortenService.shorten(dto);
+	@CrossOrigin
+	@PostMapping("/chop/v1/shorten")
+	@ApiOperation(value = "Url 단축", notes = "Url을 단축하여 반환한다", response = UrlRequestDto.class)
+	public ResponseEntity<UrlResponseDto> shortenUrl(@Valid @RequestBody UrlRequestDto dto) {
+		Url responseUrl = shortenService.shorten(dto);
 
-        shortenService.updateTotalUrlCount();
+		shortenService.updateTotalUrlCount();
 
-        UrlResponseDto responseDto = UrlResponseDto.builder()
-                .shortUrl(responseUrl.getShortUrl())
-                .originUrl(responseUrl.getOriginUrl())
-                .build();
 
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
-    }
+    UrlResponseDto responseDto = UrlResponseDto.builder()
+             .shortUrl("nexters.me/"+responseUrl.getShortUrl())
+             .originUrl(responseUrl.getOriginUrl())
+             .build();
 
-    @GetMapping("/chop/v1/count")
-    @ApiOperation(value = "단축 Url 갯수 반환", notes = "여태까지 단축된 Url의 갯수를 반환한다", response = StatsMainResponseDto.class)
-    public ResponseEntity<StatsMainResponseDto> globalCount() {
-        long globalCount = shortenService.getGlobalCount();
+		return new ResponseEntity<>(responseDto, HttpStatus.OK);
+	}
 
-        StatsMainResponseDto dto = StatsMainResponseDto.builder()
-            .globalCount(globalCount)
-            .build();
+	@CrossOrigin
+	@GetMapping("/chop/v1/count")
+	@ApiOperation(value = "단축 Url 갯수 반환", notes = "여태까지 단축된 Url의 갯수를 반환한다", response = StatsMainResponseDto.class)
+	public ResponseEntity<StatsMainResponseDto> globalCount() {
+		long globalCount = shortenService.getGlobalCount();
 
-        return new ResponseEntity<>(dto, HttpStatus.OK);
-    }
+		StatsMainResponseDto dto = StatsMainResponseDto.builder()
+			.globalCount(globalCount)
+			.build();
+
+		return new ResponseEntity<>(dto, HttpStatus.OK);
+	}
 }
