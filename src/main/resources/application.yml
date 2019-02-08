@@ -13,11 +13,9 @@ string:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    jdbc-url: jdbc:mysql://101.101.162.240:3306/chop?autoReconnect=true&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://101.101.162.240:3306/chop?autoReconnect=true&useSSL=false&serverTimezone=UTC
     username: short
     password: nexters12
-
-
 
     jpa:
         show-sql : true
@@ -25,14 +23,12 @@ spring:
         profiles:
           hibernate:
             format_sql : true
----
-#statistics 디비
-bar :
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    jdbc-url: jdbc:mysql://statistics-bd.ci6m5mpn73xb.ap-northeast-2.rds.amazonaws.com:3306/statistics?autoReconnect=true&useSSL=false&serverTimezone=UTC
-    username: nexters
-    password: nexters12
+
+    dbcp2:
+      validation-query: select 1
+      test-while-idle: true
+      time-between-eviction-runs-millis: 30000
+
 
 ---
 #jpa 설정
