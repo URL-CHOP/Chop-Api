@@ -13,14 +13,14 @@
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter" >
             <level>INFO</level>
         </filter>
-        <file>/nexters/logs/Chop.log</file>
+        <file>/nexters/logs/chop.log</file>
         <encoder>
             <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35} - %msg%n</pattern>
         </encoder>
 
         <!--요일이 바뀌면 과거 로그 파일 이름으로 변경-->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>/nexters/dateLog/%d{yyyy_MM_dd}.%i.log</fileNamePattern>
+            <fileNamePattern>/nexters/dateLog/%d{yyyy_MM_dd}.%i.chop.log</fileNamePattern>
             <maxFileSize>50MB</maxFileSize>
             <maxHistory>14</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
@@ -33,14 +33,14 @@
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter" >
             <level>ERROR</level>
         </filter>
-        <file>/nexters/logs/Chop_error.log</file>
+        <file>/nexters/logs/chop_error.log</file>
         <encoder>
             <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35} - %msg%n</pattern>
         </encoder>
 
         <!--요일이 바뀌면 과거 로그 파일 이름으로 변경-->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>/nexters/dateLog/%d{yyyy_MM_dd}.%i.error.log</fileNamePattern>
+            <fileNamePattern>/nexters/dateLog/%d{yyyy_MM_dd}.%i.chop_error.log</fileNamePattern>
             <maxFileSize>50MB</maxFileSize>
             <maxHistory>14</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
