@@ -12,24 +12,26 @@ string:
 #url 디비
 spring:
   datasource:
+    type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://101.101.162.240:3306/chop?autoReconnect=true&useSSL=false&serverTimezone=UTC
+    jdbc-url: jdbc:mysql://101.101.162.240:3306/chop?useSSL=false&serverTimezone=UTC
     username: short
     password: nexters12
-
+    
+    hikari:
+      connection-test-query: SELECT 1
+      maximum-pool-size: 20
+      pool-name: SpringBootHikariCP
+      max-lifetime: 27000000
+      connection-timeout: 30000
+      leak-detection-threshold: 2000
+      
     jpa:
         show-sql : true
         database : default
         profiles:
           hibernate:
             format_sql : true
-
-    dbcp2:
-      validation-query: select 1
-      test-while-idle: true
-      time-between-eviction-runs-millis: 30000
-
-
 ---
 #jpa 설정
 
