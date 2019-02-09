@@ -27,8 +27,10 @@ import java.net.URI;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Api(description = "리다이렉트 api")
 public class RedirectController {
-	private final RedirectService redirectService;
-	private final ChopGrpcClient grpcClient;
+
+    private final RedirectService redirectService;
+    private final ChopGrpcClient grpcClient;
+
 
 	@CrossOrigin(origins = "*")
 	@GetMapping("/{shortenUrl}")

@@ -17,6 +17,7 @@ spring:
     jdbc-url: jdbc:mysql://101.101.162.240:3306/chop?useSSL=false&serverTimezone=UTC
     username: short
     password: nexters12
+    
     hikari:
       connection-test-query: SELECT 1
       maximum-pool-size: 20
@@ -24,14 +25,13 @@ spring:
       max-lifetime: 27000000
       connection-timeout: 30000
       leak-detection-threshold: 2000
-
+      
     jpa:
         show-sql : true
         database : default
         profiles:
           hibernate:
             format_sql : true
-
 ---
 #jpa 설정
 
