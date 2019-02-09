@@ -18,12 +18,7 @@ spring:
     username: short
     password: nexters12
     hikari:
-      connection-test-query: SELECT 1
-      maximum-pool-size: 20
-      pool-name: SpringBootHikariCP
-      max-lifetime: 27000000
-      connection-timeout: 30000
-      leak-detection-threshold: 2000
+      leak-detection-threshold: 120000
 
     jpa:
         show-sql : true
