@@ -14,7 +14,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    jdbc-url: jdbc:mysql://101.101.162.240:3306/chop?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://101.101.162.240:3306/chop?useSSL=false&serverTimezone=UTC
     username: short
     password: nexters12
     
