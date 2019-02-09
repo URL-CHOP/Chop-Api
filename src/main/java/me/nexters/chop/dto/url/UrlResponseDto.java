@@ -19,6 +19,8 @@ public class UrlResponseDto {
     @ApiModelProperty(notes = "줄여진 Url", required = true)
     private String shortUrl;
 
+    //TODO title 프로퍼티 추가
+
     @Builder
     public UrlResponseDto(String originUrl, String shortUrl) {
         this.originUrl = originUrl;
