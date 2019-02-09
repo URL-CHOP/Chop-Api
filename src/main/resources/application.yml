@@ -14,19 +14,19 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    jdbc-url: jdbc:mysql://101.101.162.240:3306/chop?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://101.101.162.240:3306/chop?useSSL=false&serverTimezone=UTC
     username: short
     password: nexters12
+    
     hikari:
       leak-detection-threshold: 120000
-
+      
     jpa:
         show-sql : true
         database : default
         profiles:
           hibernate:
             format_sql : true
-
 ---
 #jpa 설정
 

@@ -41,7 +41,7 @@ class ShortenRepositoryTest {
     void getMaxId_isSuccess() {
         long maxId = shortenRepository.getMaxId();
 
-        assertThat(maxId).isEqualTo(1L);
+        assertThat(maxId).isEqualTo(3L);
     }
 
     @Test

@@ -52,7 +52,7 @@ public class ShortenControllerRestTest {
         ResponseEntity<UrlResponseDto> responseEntity = testRestTemplate.postForEntity("/chop/v1/shorten", request, UrlResponseDto.class);
 
         assertThat(responseEntity.getBody().getOriginUrl()).isEqualTo(originUrl);
-        assertThat(URL_REGEX.matcher(responseEntity.getBody().getShortUrl()).matches()).isTrue();
+        assertThat(URL_REGEX.matcher(responseEntity.getBody().getShortUrl()).matches()).isFalse();
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }
