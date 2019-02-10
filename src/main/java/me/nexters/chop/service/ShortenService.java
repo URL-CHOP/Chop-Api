@@ -1,13 +1,17 @@
 package me.nexters.chop.service;
 
 import lombok.RequiredArgsConstructor;
+import me.nexters.chop.api.exception.ErrorDetail;
+import me.nexters.chop.business.PageProfileBusiness;
 import me.nexters.chop.domain.url.GlobalCount;
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.dto.url.UrlRequestDto;
 import me.nexters.chop.repository.url.GlobalCountRepository;
 import me.nexters.chop.repository.url.ShortenRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,57 +23,63 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ShortenService {
-    private static final int BASE62 = 62;
+	private static final int BASE62 = 62;
 
-    @Value("${string.base62}")
-    private String base62String;
+	@Value("${string.base62}")
+	private String base62String;
 
-    private final ShortenRepository shortenRepository;
-    private final GlobalCountRepository globalCountRepository;
+	private final PageProfileBusiness pageProfileBusiness;
 
-    private String base62Encode(int inputNumber) {
-        char[] table = base62String.toCharArray();
-        StringBuilder sb = new StringBuilder();
+	private final ShortenRepository shortenRepository;
+	private final GlobalCountRepository globalCountRepository;
 
-        while (inputNumber > 0) {
-            sb.append(table[inputNumber % BASE62]);
-            inputNumber /= BASE62;
-        }
+	private String base62Encode(int inputNumber) {
+		char[] table = base62String.toCharArray();
+		StringBuilder sb = new StringBuilder();
 
-        return sb.toString();
-    }
+		while (inputNumber > 0) {
+			sb.append(table[inputNumber % BASE62]);
+			inputNumber /= BASE62;
+		}
 
-    @Transactional
-    public Url shorten(UrlRequestDto dto) {
-        String originUrl = dto.getOriginUrl().trim();
+		return sb.toString();
+	}
 
-        return Optional.ofNullable(shortenRepository
-                .findUrlByOriginUrl(originUrl)).orElseGet(() -> saveUrl(originUrl));
-    }
+	@Transactional
+	public Url shorten(UrlRequestDto dto) {
+		String originUrl = dto.getOriginUrl().trim();
 
-    private Url saveUrl(String originUrl) {
-        int hashNumber = findMaxIdFromDatabase();
+		return Optional.ofNullable(shortenRepository
+			.findUrlByOriginUrl(originUrl)).orElseGet(() -> saveUrl(originUrl));
+	}
 
-        Url url = Url.builder()
-                .originUrl(originUrl)
-                .shortUrl(base62Encode(hashNumber))
-                .build();
+	private Url saveUrl(String originUrl) {
+		String pageTitle = Optional.ofNullable(pageProfileBusiness.getTitle(originUrl))
+			.orElseThrow(() -> new ErrorDetail(HttpStatus.BAD_REQUEST, originUrl + " 해당 url이 정상적이지 않습니다"));
 
-        return shortenRepository.save(url);
-    }
+		int hashNumber = findMaxIdFromDatabase();
 
-    private int findMaxIdFromDatabase() {
-        return (int) (shortenRepository.getMaxId() + 1);
-    }
+		Url url = Url.builder()
+			.originUrl(originUrl)
+			.shortUrl(base62Encode(hashNumber))
+			.title(pageTitle)
+			.build();
 
-    @Transactional
-    public void updateTotalUrlCount() {
-        globalCountRepository.updateTotalCount();
-    }
+		return shortenRepository.save(url);
+	}
 
-    public long getGlobalCount() {
-        return globalCountRepository.findById(1L)
-            .orElse(GlobalCount.empty())
-            .getGlobalCount();
-    }
+	private int findMaxIdFromDatabase() {
+		return (int)(shortenRepository.getMaxId() + 1);
+	}
+
+	@Transactional
+	public void updateTotalUrlCount() {
+		globalCountRepository.updateTotalCount();
+	}
+
+	public long getGlobalCount() {
+		return globalCountRepository.findById(1L)
+			.orElse(GlobalCount.empty())
+			.getGlobalCount();
+	}
 }

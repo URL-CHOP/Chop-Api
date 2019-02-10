@@ -9,11 +9,11 @@ import org.springframework.http.HttpStatus;
  */
 @Getter
 @NoArgsConstructor
-class ErrorDetail {
+public class ErrorDetail extends RuntimeException {
     private HttpStatus status;
     private String message;
 
-    ErrorDetail(HttpStatus status, String message) {
+    public ErrorDetail(HttpStatus status, String message) {
         this.status = status;
         this.message = message;
     }
