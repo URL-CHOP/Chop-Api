@@ -1,24 +1,20 @@
 package me.nexters.chop.api;
 
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import me.nexters.chop.business.PageProfileBusiness;
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.dto.stats.StatsMainResponseDto;
 import me.nexters.chop.dto.url.UrlRequestDto;
 import me.nexters.chop.dto.url.UrlResponseDto;
 import me.nexters.chop.service.ShortenService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author junho.park
@@ -27,7 +23,9 @@ import me.nexters.chop.service.ShortenService;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Api(description = "단축 api")
 public class ShortenController {
+
 	private final ShortenService shortenService;
+	private final PageProfileBusiness pageProfileBusiness;
 
 	@CrossOrigin(origins = "*")
 	@PostMapping("/chop/v1/shorten")
@@ -38,9 +36,10 @@ public class ShortenController {
 		shortenService.updateTotalUrlCount();
 
 		UrlResponseDto responseDto = UrlResponseDto.builder()
-			.shortUrl("nexters.me/" + responseUrl.getShortUrl())
-			.originUrl(responseUrl.getOriginUrl())
-			.build();
+				.shortUrl("nexters.me/" + responseUrl.getShortUrl())
+				.originUrl(responseUrl.getOriginUrl())
+				.title(responseUrl.getTitle())
+				.build();
 
 		return new ResponseEntity<>(responseDto, HttpStatus.OK);
 	}

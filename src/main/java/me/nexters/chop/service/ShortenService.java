@@ -29,7 +29,6 @@ public class ShortenService {
 	private String base62String;
 
 	private final PageProfileBusiness pageProfileBusiness;
-
 	private final ShortenRepository shortenRepository;
 	private final GlobalCountRepository globalCountRepository;
 

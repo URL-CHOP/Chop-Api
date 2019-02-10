@@ -19,11 +19,13 @@ public class UrlResponseDto {
     @ApiModelProperty(notes = "줄여진 Url", required = true)
     private String shortUrl;
 
-    //TODO title 프로퍼티 추가
+    @ApiModelProperty(notes = "html 태그 title 가져오기", required = true)
+    private String title;
 
     @Builder
-    public UrlResponseDto(String originUrl, String shortUrl) {
+    public UrlResponseDto(String originUrl, String shortUrl, String title) {
         this.originUrl = originUrl;
         this.shortUrl = shortUrl;
+        this.title = title;
     }
 }
