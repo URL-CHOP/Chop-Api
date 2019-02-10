@@ -3,7 +3,6 @@ package me.nexters.chop.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import me.nexters.chop.business.PageProfileBusiness;
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.dto.stats.StatsMainResponseDto;
 import me.nexters.chop.dto.url.UrlRequestDto;
@@ -25,7 +24,6 @@ import javax.validation.Valid;
 public class ShortenController {
 
 	private final ShortenService shortenService;
-	private final PageProfileBusiness pageProfileBusiness;
 
 	@CrossOrigin(origins = "*")
 	@PostMapping("/chop/v1/shorten")
