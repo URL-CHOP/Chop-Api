@@ -18,8 +18,8 @@ message Platform {
 
 message Referer {
   string short_url = 1;
-  repeated string referer = 2;
-  repeated int32 count = 3;
+  string referer = 2;
+  int32 count = 3;
 }
 
 message TotalCount {
@@ -29,6 +29,6 @@ message TotalCount {
 
 service UrlStatsService {
   rpc getPlatformCount (UrlStatsRequest) returns (Platform);
-  rpc getRefererCount (UrlStatsRequest) returns (Referer);
+  rpc getRefererCount (UrlStatsRequest) returns (stream Referer);
   rpc getTotalCount (UrlStatsRequest) returns (TotalCount);
 }

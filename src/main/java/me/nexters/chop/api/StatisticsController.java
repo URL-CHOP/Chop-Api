@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author junho.park
  */
@@ -44,16 +47,21 @@ public class StatisticsController {
 
 	@GetMapping("/chop/v1/referer/{shortenUrl}")
 	@ApiOperation(value = "해당 url referer 반환", notes = "해당 url의 referer 카운트를 반환한다.", response = StatsMainResponseDto.class)
-	public ResponseEntity<StatsRefererResponseDto> refererRequest(@PathVariable("shortenUrl") String shortenUrl) {
-		Referer referer = grpcClient.getRefererStats(shortenUrl);
+	public ResponseEntity<List<StatsRefererResponseDto>> refererRequest(@PathVariable("shortenUrl") String shortenUrl) {
+		List<Referer> referers = grpcClient.getRefererStats(shortenUrl);
 
-		StatsRefererResponseDto dto = StatsRefererResponseDto.builder()
-			.shortUrl(referer.getShortUrl())
-			.referer(referer.getRefererList())
-			.count(referer.getCountList())
-			.build();
+		List<StatsRefererResponseDto> dtoList = new ArrayList<>();
 
-		return new ResponseEntity<>(dto, HttpStatus.OK);
+		for (Referer referer : referers) {
+			StatsRefererResponseDto dto = StatsRefererResponseDto.builder()
+					.shortUrl(referer.getShortUrl())
+					.referer(referer.getReferer())
+					.count(referer.getCount())
+					.build();
+
+			dtoList.add(dto);
+		}
+		return new ResponseEntity<>(dtoList, HttpStatus.OK);
 	}
 
 	@GetMapping("/chop/v1/totalcount/{shortenUrl}")
