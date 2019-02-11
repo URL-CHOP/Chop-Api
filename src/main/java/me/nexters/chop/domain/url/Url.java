@@ -26,10 +26,14 @@ public class Url extends BaseTime {
     @Column(name = "short_url", nullable = false)
     private String shortUrl;
 
+    @Column(name = "title")
+    private String title;
+
     @Builder
-    public Url(Long id, String originUrl, String shortUrl) {
+    public Url(Long id, String originUrl, String shortUrl, String title) {
         this.id = id;
         this.originUrl = originUrl;
         this.shortUrl = shortUrl;
+        this.title = title;
     }
 }
