@@ -80,8 +80,6 @@ public class StatisticsController {
 	@ApiOperation(value = "해당 url 총 클릭수 반환", notes = "해당 url의 총 클릭수를 반환한다.", response = StatsMainResponseDto.class)
 	public ResponseEntity<List<StatsClickResponseDto>> clickCountRequest
 			(@PathVariable("shortenUrl") String shortenUrl, @RequestParam int week) {
-		System.out.println("week : " + week);
-
 		List<StatsClickResponseDto> dtoList = new ArrayList<>();
 
 		List<ClickCount> clickCounts = grpcClient.getClickCount(shortenUrl, week);
