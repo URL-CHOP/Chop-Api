@@ -92,4 +92,20 @@ public class ChopGrpcClient {
 
         return totalCount;
     }
+
+    public List<ClickCount> getClickCount(String shortenUrl, int week) {
+        UrlClickStatsRequest urlClickStatsRequest = UrlClickStatsRequest.newBuilder()
+                .setShortUrl(shortenUrl)
+                .setWeek(week)
+                .build();
+
+        List<ClickCount> clickCounts = new ArrayList<>();
+        Iterator<ClickCount> clickCountIterator = urlStatsServiceBlockingStub.getClickCount(urlClickStatsRequest);
+
+        while (clickCountIterator.hasNext()) {
+            clickCounts.add(clickCountIterator.next());
+        }
+
+        return clickCounts;
+    }
 }
