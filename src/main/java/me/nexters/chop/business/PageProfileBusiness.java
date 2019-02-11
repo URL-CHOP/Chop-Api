@@ -22,13 +22,13 @@ import java.util.regex.Pattern;
 public class PageProfileBusiness {
 
 	private final RestTemplate restTemplate;
-	private static final int TITLE_NUMBER = 2;
+	private static final int TITLE_GET = 2;
 	private static final Pattern TITLE_REGEX = Pattern.compile("(<title>)([A-Z0-9a-zㄱ-ㅎㅏ-ㅣ가-힣:+&@#/%?=~_|!:,.;-]+)");
 
 	public String getTitle(String url) {
 		Matcher matcher = TITLE_REGEX.matcher(restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(new HttpHeaders()),String.class).getBody().replaceAll("\\s",""));
 		if (matcher.find()) {
-			return matcher.group(TITLE_NUMBER);
+			return matcher.group(TITLE_GET);
 		}
 
 		return null;
