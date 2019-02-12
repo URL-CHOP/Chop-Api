@@ -25,11 +25,10 @@ import java.util.stream.Stream;
 public class PageProfileBusiness {
 
 	private final RestTemplate restTemplate;
-	private static final int TITLE_GET = 2;
-	private static final Pattern TITLE_REGEX = Pattern.compile("(<title>)([A-Z0-9a-zㄱ-ㅎㅏ-ㅣ가-힣:+&@#/%?=~_|!:,.;-]+)");
+	private static final int TITLE_GET = 1;
+	private static final Pattern TITLE_REGEX = Pattern.compile("([A-Z0-9a-zㄱ-ㅎㅏ-ㅣ가-힣:+&@#/%?=~_|!:,.;-]+)(</title>)");
 
 	public String getTitle(String url) {
-
 		Matcher matcher = TITLE_REGEX.matcher(restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(new HttpHeaders()),String.class).getBody().replaceAll("\\s",""));
 		if (matcher.find()) {
 			 return Stream.of(matcher.group(TITLE_GET))
@@ -40,7 +39,6 @@ public class PageProfileBusiness {
 
 		return null;
 	}
-
 
 	private String decoding(String s) {
 		try {
