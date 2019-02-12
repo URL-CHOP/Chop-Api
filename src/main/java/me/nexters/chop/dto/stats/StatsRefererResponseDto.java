@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 /**
  * @author junho.park
  */
@@ -19,13 +17,13 @@ public class StatsRefererResponseDto {
     private String shortUrl;
 
     @ApiModelProperty(notes = "레퍼러", required = true)
-    private List<String> referer;
+    private String referer;
 
     @ApiModelProperty(notes = "레퍼러 유입 횟수", required = true)
-    private List<Integer> count;
+    private int count;
 
     @Builder
-    public StatsRefererResponseDto(String shortUrl, List<String> referer, List<Integer> count) {
+    public StatsRefererResponseDto(String shortUrl, String referer, int count) {
         this.shortUrl = shortUrl;
         this.referer = referer;
         this.count = count;

@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 option java_multiple_files = true;
 option java_package = "me.nexters.chop.grpc";
 option java_outer_classname = "UrlStatsProto";
@@ -10,6 +12,11 @@ message UrlStatsRequest {
   string short_url = 1;
 }
 
+message UrlClickStatsRequest {
+  string short_url = 1;
+  int32 week = 2;
+}
+
 message Platform {
   string short_url = 1;
   int32 mobile = 2;
@@ -18,8 +25,8 @@ message Platform {
 
 message Referer {
   string short_url = 1;
-  repeated string referer = 2;
-  repeated int32 count = 3;
+  string referer = 2;
+  int32 count = 3;
 }
 
 message TotalCount {
@@ -27,8 +34,14 @@ message TotalCount {
   int32 total_count = 2;
 }
 
+message ClickCount {
+  google.protobuf.Timestamp date = 1;
+  int32 count = 2;
+}
+
 service UrlStatsService {
   rpc getPlatformCount (UrlStatsRequest) returns (Platform);
-  rpc getRefererCount (UrlStatsRequest) returns (Referer);
+  rpc getRefererCount (UrlStatsRequest) returns (stream Referer);
   rpc getTotalCount (UrlStatsRequest) returns (TotalCount);
+  rpc getClickCount (UrlClickStatsRequest) returns (stream ClickCount);
 }
