@@ -1,11 +1,16 @@
 package me.nexters.chop.api.grpc;
 
 import io.grpc.Channel;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import me.nexters.chop.grpc.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author junho.park
@@ -61,17 +66,19 @@ public class ChopGrpcClient {
         return platform;
     }
 
-    public Referer getRefererStats(String shortenUrl) {
+    public List<Referer> getRefererStats(String shortenUrl) {
         UrlStatsRequest urlStatsRequest = UrlStatsRequest.newBuilder()
                 .setShortUrl(shortenUrl)
                 .build();
 
-        Referer referer = urlStatsServiceBlockingStub.getRefererCount(urlStatsRequest);
+        List<Referer> referers = new ArrayList<>();
+        Iterator<Referer> refererIterator = urlStatsServiceBlockingStub.getRefererCount(urlStatsRequest);
 
-        logger.info("Server response [referer] {} ", referer.getRefererList());
-        logger.info("Server response [referer count] {} ", referer.getCountList());
+        while (refererIterator.hasNext()) {
+            referers.add(refererIterator.next());
+        }
 
-        return referer;
+        return referers;
     }
 
     public TotalCount getTotalCount(String shortenUrl) {
@@ -84,5 +91,21 @@ public class ChopGrpcClient {
         logger.info("Server response [total count] {} ", totalCount.getTotalCount());
 
         return totalCount;
+    }
+
+    public List<ClickCount> getClickCount(String shortenUrl, int week) {
+        UrlClickStatsRequest urlClickStatsRequest = UrlClickStatsRequest.newBuilder()
+                .setShortUrl(shortenUrl)
+                .setWeek(week)
+                .build();
+
+        List<ClickCount> clickCounts = new ArrayList<>();
+        Iterator<ClickCount> clickCountIterator = urlStatsServiceBlockingStub.getClickCount(urlClickStatsRequest);
+
+        while (clickCountIterator.hasNext()) {
+            clickCounts.add(clickCountIterator.next());
+        }
+
+        return clickCounts;
     }
 }
