@@ -18,20 +18,17 @@ message UrlClickStatsRequest {
 }
 
 message Platform {
-  string short_url = 1;
-  int32 mobile = 2;
-  int32 browser = 3;
+  int32 mobile = 1;
+  int32 browser = 2;
 }
 
 message Referer {
-  string short_url = 1;
-  string referer = 2;
-  int32 count = 3;
+  string referer = 1;
+  int32 count = 2;
 }
 
 message TotalCount {
-  string short_url = 1;
-  int32 total_count = 2;
+  int32 total_count = 1;
 }
 
 message ClickCount {

@@ -13,9 +13,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @ApiModel(value = "요청된 url에 대한 레퍼러 통계 DTO")
 public class StatsRefererResponseDto {
-    @ApiModelProperty(notes = "단축 url", required = true)
-    private String shortUrl;
-
     @ApiModelProperty(notes = "레퍼러", required = true)
     private String referer;
 
@@ -23,8 +20,7 @@ public class StatsRefererResponseDto {
     private int count;
 
     @Builder
-    public StatsRefererResponseDto(String shortUrl, String referer, int count) {
-        this.shortUrl = shortUrl;
+    public StatsRefererResponseDto(String referer, int count) {
         this.referer = referer;
         this.count = count;
     }
