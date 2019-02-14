@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Component
 public class ChopGrpcClient {
-    public static Logger logger = LoggerFactory.getLogger(ChopGrpcClient.class);
+    private static Logger logger = LoggerFactory.getLogger(ChopGrpcClient.class);
 
     private UrlClickServiceGrpc.UrlClickServiceStub urlClickStub;
     private UrlStatsServiceGrpc.UrlStatsServiceBlockingStub urlStatsServiceBlockingStub;
@@ -48,7 +48,7 @@ public class ChopGrpcClient {
 
             @Override
             public void onCompleted() {
-                logger.info("서버 응답 종료");
+                logger.info("Grpc 서버 응답 종료");
             }
         });
     }
