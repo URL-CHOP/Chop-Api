@@ -1,8 +1,6 @@
 package me.nexters.chop.service;
 
 import lombok.RequiredArgsConstructor;
-import me.nexters.chop.api.exception.ErrorDetail;
-import me.nexters.chop.business.PageProfileBusiness;
 import me.nexters.chop.domain.url.GlobalCount;
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.dto.url.UrlRequestDto;
@@ -11,7 +9,6 @@ import me.nexters.chop.repository.url.ShortenRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +25,6 @@ public class ShortenService {
 	@Value("${string.base62}")
 	private String base62String;
 
-	private final PageProfileBusiness pageProfileBusiness;
 	private final ShortenRepository shortenRepository;
 	private final GlobalCountRepository globalCountRepository;
 
@@ -53,16 +49,14 @@ public class ShortenService {
 	}
 
 	private Url saveUrl(String originUrl) {
-		String pageTitle = Optional.ofNullable(pageProfileBusiness.getTitle(originUrl))
-			.orElseThrow(() -> new ErrorDetail(HttpStatus.BAD_REQUEST, originUrl + " 해당 url이 정상적이지 않습니다"));
-
 		int hashNumber = findMaxIdFromDatabase();
 
+
 		Url url = Url.builder()
-			.originUrl(originUrl)
-			.shortUrl(base62Encode(hashNumber))
-			.title(pageTitle)
-			.build();
+				.originUrl(originUrl)
+				.shortUrl(base62Encode(hashNumber))
+				.build();
+
 
 		return shortenRepository.save(url);
 	}

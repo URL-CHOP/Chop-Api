@@ -36,7 +36,6 @@ public class ShortenController {
 		UrlResponseDto responseDto = UrlResponseDto.builder()
 				.shortUrl("nexters.me/" + responseUrl.getShortUrl())
 				.originUrl(responseUrl.getOriginUrl())
-				.title(responseUrl.getTitle())
 				.build();
 
 		return new ResponseEntity<>(responseDto, HttpStatus.OK);
