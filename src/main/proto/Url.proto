@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 option java_multiple_files = true;
 option java_package = "me.nexters.chop.grpc";
 option java_outer_classname = "UrlProto";
@@ -8,7 +10,7 @@ package grpc;
 
 message Url {
   string short_url = 1;
-  int64 click_time = 2;
+  google.protobuf.Timestamp click_time = 2;
   string platform = 3;
   string referer = 4;
 }

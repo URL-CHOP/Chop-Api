@@ -1,5 +1,6 @@
 package me.nexters.chop.api.grpc;
 
+import com.google.protobuf.Timestamp;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.inprocess.InProcessServerBuilder;
 import io.grpc.stub.StreamObserver;
@@ -16,6 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -45,7 +48,7 @@ class ChopGrpcClientTest {
     @Test
     void insertStatsToStatsServer_IsSuccess() {
         Url url = Url.newBuilder().setShortUrl("a")
-                .setClickTime(System.currentTimeMillis())
+                .setClickTime(Timestamp.newBuilder())
                 .setPlatform("mobile")
                 .setReferer("https://google.com").build();
         Success success = Success.newBuilder().setMessage("save success : a").build();

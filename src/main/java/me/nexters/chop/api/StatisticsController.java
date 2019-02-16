@@ -36,7 +36,6 @@ public class StatisticsController {
 		Platform platform = grpcClient.getPlatformStats(shortenUrl);
 
 		StatsPlatformResponseDto dto = StatsPlatformResponseDto.builder()
-			.shortUrl(platform.getShortUrl())
 			.mobile(platform.getMobile())
 			.browser(platform.getBrowser())
 			.build();
@@ -53,7 +52,6 @@ public class StatisticsController {
 
 		for (Referer referer : referers) {
 			StatsRefererResponseDto dto = StatsRefererResponseDto.builder()
-					.shortUrl(referer.getShortUrl())
 					.referer(referer.getReferer())
 					.count(referer.getCount())
 					.build();
@@ -69,7 +67,6 @@ public class StatisticsController {
 		TotalCount totalCount = grpcClient.getTotalCount(shortenUrl);
 
 		StatsTotalResponseDto dto = StatsTotalResponseDto.builder()
-			.shortUrl(totalCount.getShortUrl())
 			.totalCount(totalCount.getTotalCount())
 			.build();
 
