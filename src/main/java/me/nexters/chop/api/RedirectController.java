@@ -33,7 +33,6 @@ public class RedirectController {
 	public ResponseEntity<UrlResponseDto> redirect(@PathVariable("shortenUrl") String shortenUrl,
 		@RequestHeader(value = "Referer", required = false, defaultValue = "none") String referer,
 		@RequestHeader(value = "User-Agent", defaultValue = "myBrowser") String userAgent) {
-
 		Url url = redirectService.redirect(shortenUrl);
 
 		String originUrl = url.getOriginUrl();

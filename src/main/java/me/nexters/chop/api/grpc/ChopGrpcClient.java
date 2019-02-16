@@ -2,6 +2,7 @@ package me.nexters.chop.api.grpc;
 
 import com.google.protobuf.Timestamp;
 import io.grpc.Channel;
+import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import me.nexters.chop.grpc.*;
@@ -65,13 +66,14 @@ public class ChopGrpcClient {
                 .setShortUrl(shortenUrl)
                 .build();
 
-        Platform platform;
+        Platform platform = null;
 
         try {
             platform = urlStatsServiceBlockingStub.getPlatformCount(urlStatsRequest);
         } catch (StatusRuntimeException e) {
-            logger.error(e.getMessage());
-            throw new EntityNotFoundException("존재하지 않는 url 입니다.");
+            if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
+                throw new EntityNotFoundException(e.getMessage());
+            }
         }
 
         return platform;
@@ -83,17 +85,19 @@ public class ChopGrpcClient {
                 .build();
 
         List<Referer> referers = new ArrayList<>();
-        Iterator<Referer> refererIterator;
+        Iterator<Referer> refererIterator = null;
 
         try {
             refererIterator = urlStatsServiceBlockingStub.getRefererCount(urlStatsRequest);
-        } catch (StatusRuntimeException e) {
-            logger.error(e.getMessage());
-            throw new EntityNotFoundException("존재하지 않는 url 입니다.");
-        }
 
-        while (refererIterator.hasNext()) {
-            referers.add(refererIterator.next());
+            while (refererIterator.hasNext()) {
+                referers.add(refererIterator.next());
+            }
+
+        } catch (StatusRuntimeException e) {
+            if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
+                throw new EntityNotFoundException(e.getMessage());
+            }
         }
 
         return referers;
@@ -104,13 +108,14 @@ public class ChopGrpcClient {
                 .setShortUrl(shortenUrl)
                 .build();
 
-        TotalCount totalCount;
+        TotalCount totalCount = null;
 
         try {
             totalCount = urlStatsServiceBlockingStub.getTotalCount(urlStatsRequest);
         } catch (StatusRuntimeException e) {
-            logger.error(e.getMessage());
-            throw new EntityNotFoundException("존재하지 않는 url 입니다.");
+            if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
+                throw new EntityNotFoundException(e.getMessage());
+            }
         }
 
         return totalCount;
@@ -123,17 +128,18 @@ public class ChopGrpcClient {
                 .build();
 
         List<ClickCount> clickCounts = new ArrayList<>();
-        Iterator<ClickCount> clickCountIterator;
+        Iterator<ClickCount> clickCountIterator = null;
 
-        try{
+        try {
             clickCountIterator = urlStatsServiceBlockingStub.getClickCount(urlClickStatsRequest);
-        } catch (StatusRuntimeException e) {
-            logger.error(e.getMessage());
-            throw new EntityNotFoundException("존재하지 않는 url 입니다.");
-        }
 
-        while (clickCountIterator.hasNext()) {
-            clickCounts.add(clickCountIterator.next());
+            while (clickCountIterator.hasNext()) {
+                clickCounts.add(clickCountIterator.next());
+            }
+        } catch (StatusRuntimeException e) {
+            if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
+                throw new EntityNotFoundException(e.getMessage());
+            }
         }
 
         return clickCounts;
