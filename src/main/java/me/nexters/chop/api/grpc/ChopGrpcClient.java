@@ -1,5 +1,6 @@
 package me.nexters.chop.api.grpc;
 
+import com.google.protobuf.Timestamp;
 import io.grpc.Channel;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
@@ -29,8 +30,13 @@ public class ChopGrpcClient {
     }
 
     public void insertStatsToStatsServer(String shortenUrl, String referer, String userAgent) {
+        long currentTimeMillis = System.currentTimeMillis();
+        Timestamp timestamp = Timestamp.newBuilder().
+                setSeconds(currentTimeMillis / 1000)
+                .setNanos((int) ((currentTimeMillis % 1000) * 1000000)).build();
+
         Url url = Url.newBuilder().setShortUrl(shortenUrl)
-                .setClickTime(System.currentTimeMillis())
+                .setClickTime(timestamp)
                 .setPlatform(userAgent)
                 .setReferer(referer).build();
 
