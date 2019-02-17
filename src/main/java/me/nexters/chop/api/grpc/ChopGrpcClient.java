@@ -31,13 +31,8 @@ public class ChopGrpcClient {
     }
 
     public void insertStatsToStatsServer(String shortenUrl, String referer, String userAgent) {
-        long currentTimeMillis = System.currentTimeMillis();
-        Timestamp timestamp = Timestamp.newBuilder().
-                setSeconds(currentTimeMillis / 1000)
-                .setNanos((int) ((currentTimeMillis % 1000) * 1000000)).build();
-
         Url url = Url.newBuilder().setShortUrl(shortenUrl)
-                .setClickTime(timestamp)
+                .setClickTime(generateCurrentTimestamp())
                 .setPlatform(userAgent)
                 .setReferer(referer).build();
 
@@ -59,6 +54,13 @@ public class ChopGrpcClient {
                 logger.info("Grpc 서버 응답 종료");
             }
         });
+    }
+
+    private Timestamp generateCurrentTimestamp() {
+        long currentTimeMillis = System.currentTimeMillis();
+        return Timestamp.newBuilder().
+            setSeconds(currentTimeMillis / 1000)
+            .setNanos((int) ((currentTimeMillis % 1000) * 1000000)).build();
     }
 
     public Platform getPlatformStats(String shortenUrl) {
@@ -85,7 +87,7 @@ public class ChopGrpcClient {
                 .build();
 
         List<Referer> referers = new ArrayList<>();
-        Iterator<Referer> refererIterator = null;
+        Iterator<Referer> refererIterator;
 
         try {
             refererIterator = urlStatsServiceBlockingStub.getRefererCount(urlStatsRequest);
@@ -128,7 +130,7 @@ public class ChopGrpcClient {
                 .build();
 
         List<ClickCount> clickCounts = new ArrayList<>();
-        Iterator<ClickCount> clickCountIterator = null;
+        Iterator<ClickCount> clickCountIterator;
 
         try {
             clickCountIterator = urlStatsServiceBlockingStub.getClickCount(urlClickStatsRequest);
