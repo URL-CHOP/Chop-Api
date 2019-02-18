@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * @author junho.park
  */
 public class UrlValidator implements ConstraintValidator<ValidUrl, String> {
-    private static final Pattern URL_REGEX = Pattern.compile("^[\\s]*(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]*[\\s]*");
+    private static final Pattern URL_REGEX = Pattern.compile("^[\\s]*(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;()]*[-a-zA-Z0-9+&@#/%=~_|()]*[\\s]*");
 
     @Override
     public boolean isValid(String url, ConstraintValidatorContext constraintValidatorContext) {
