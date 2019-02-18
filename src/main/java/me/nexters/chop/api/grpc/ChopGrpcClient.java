@@ -5,13 +5,17 @@ import io.grpc.Channel;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
+import me.nexters.chop.config.time.TimeUtil;
 import me.nexters.chop.grpc.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -123,17 +127,17 @@ public class ChopGrpcClient {
         return totalCount;
     }
 
-    public List<ClickCount> getClickCount(String shortenUrl, int week) {
+    public List<ClickCount> getWeeklyClickCount(String shortenUrl, LocalDate date) {
         UrlClickStatsRequest urlClickStatsRequest = UrlClickStatsRequest.newBuilder()
                 .setShortUrl(shortenUrl)
-                .setWeek(week)
+                .setDate(TimeUtil.convertLocalDateToString(date))
                 .build();
 
         List<ClickCount> clickCounts = new ArrayList<>();
         Iterator<ClickCount> clickCountIterator;
 
         try {
-            clickCountIterator = urlStatsServiceBlockingStub.getClickCount(urlClickStatsRequest);
+            clickCountIterator = urlStatsServiceBlockingStub.getWeeklyClickCount(urlClickStatsRequest);
 
             while (clickCountIterator.hasNext()) {
                 clickCounts.add(clickCountIterator.next());
@@ -145,5 +149,10 @@ public class ChopGrpcClient {
         }
 
         return clickCounts;
+    }
+
+    // TODO
+    public List<ClickCount> getMonthlyClickCount(String shortUrl, Date date) {
+        return null;
     }
 }
