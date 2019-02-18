@@ -1,19 +1,29 @@
 package me.nexters.chop.api.grpc;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import com.google.common.collect.Lists;
 import com.google.protobuf.Timestamp;
 import io.grpc.Channel;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
-import me.nexters.chop.grpc.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import me.nexters.chop.grpc.ClickCount;
+import me.nexters.chop.grpc.Platform;
+import me.nexters.chop.grpc.Referer;
+import me.nexters.chop.grpc.Success;
+import me.nexters.chop.grpc.TotalCount;
+import me.nexters.chop.grpc.Url;
+import me.nexters.chop.grpc.UrlClickServiceGrpc;
+import me.nexters.chop.grpc.UrlClickStatsRequest;
+import me.nexters.chop.grpc.UrlStatsRequest;
+import me.nexters.chop.grpc.UrlStatsServiceGrpc;
 
 /**
  * @author junho.park
@@ -74,7 +84,10 @@ public class ChopGrpcClient {
             platform = urlStatsServiceBlockingStub.getPlatformCount(urlStatsRequest);
         } catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                throw new EntityNotFoundException(e.getMessage());
+                return Platform.newBuilder()
+                    .setMobile(0)
+                    .setBrowser(0)
+                    .build();
             }
         }
 
@@ -98,7 +111,7 @@ public class ChopGrpcClient {
 
         } catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                throw new EntityNotFoundException(e.getMessage());
+                return Lists.newArrayList();
             }
         }
 
@@ -116,7 +129,9 @@ public class ChopGrpcClient {
             totalCount = urlStatsServiceBlockingStub.getTotalCount(urlStatsRequest);
         } catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                throw new EntityNotFoundException(e.getMessage());
+                return TotalCount.newBuilder()
+                    .setTotalCount(0)
+                    .build();
             }
         }
 
@@ -140,7 +155,7 @@ public class ChopGrpcClient {
             }
         } catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                throw new EntityNotFoundException(e.getMessage());
+                Lists.newArrayList();
             }
         }
 
