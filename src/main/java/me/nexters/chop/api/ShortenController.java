@@ -26,7 +26,7 @@ public class ShortenController {
 	private final ShortenService shortenService;
 
 	@CrossOrigin(origins = "*")
-	@PostMapping("/chop/v1/shorten")
+	@PostMapping("/api/v1/shorten")
 	@ApiOperation(value = "Url 단축", notes = "Url을 단축하여 반환한다", response = UrlRequestDto.class)
 	public ResponseEntity<UrlResponseDto> shortenUrl(@Valid @RequestBody UrlRequestDto dto) {
 		Url responseUrl = shortenService.shorten(dto);
@@ -36,14 +36,13 @@ public class ShortenController {
 		UrlResponseDto responseDto = UrlResponseDto.builder()
 				.shortUrl("nexters.me/" + responseUrl.getShortUrl())
 				.originUrl(responseUrl.getOriginUrl())
-				.title(responseUrl.getTitle())
 				.build();
 
 		return new ResponseEntity<>(responseDto, HttpStatus.OK);
 	}
 
 	@CrossOrigin(origins = "*")
-	@GetMapping("/chop/v1/count")
+	@GetMapping("/api/v1/count")
 	@ApiOperation(value = "단축 Url 갯수 반환", notes = "여태까지 단축된 Url의 갯수를 반환한다", response = StatsMainResponseDto.class)
 	public ResponseEntity<StatsMainResponseDto> globalCount() {
 		long globalCount = shortenService.getGlobalCount();

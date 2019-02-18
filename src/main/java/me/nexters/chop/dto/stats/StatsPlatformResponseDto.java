@@ -13,9 +13,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @ApiModel(value = "요청된 url에 대한 플랫폼 통계 DTO")
 public class StatsPlatformResponseDto {
-    @ApiModelProperty(notes = "단축 url", required = true)
-    private String shortUrl;
-
     @ApiModelProperty(notes = "모바일 클릭 횟수", required = true)
     private int mobile;
 
@@ -23,8 +20,7 @@ public class StatsPlatformResponseDto {
     private int browser;
 
     @Builder
-    public StatsPlatformResponseDto(String shortUrl, int mobile, int browser) {
-        this.shortUrl = shortUrl;
+    public StatsPlatformResponseDto(int mobile, int browser) {
         this.mobile = mobile;
         this.browser = browser;
     }

@@ -1,18 +1,26 @@
 package me.nexters.chop.api.grpc;
 
+import com.google.protobuf.Timestamp;
 import io.grpc.Channel;
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import me.nexters.chop.grpc.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * @author junho.park
  */
 @Component
 public class ChopGrpcClient {
-    public static Logger logger = LoggerFactory.getLogger(ChopGrpcClient.class);
+    private static Logger logger = LoggerFactory.getLogger(ChopGrpcClient.class);
 
     private UrlClickServiceGrpc.UrlClickServiceStub urlClickStub;
     private UrlStatsServiceGrpc.UrlStatsServiceBlockingStub urlStatsServiceBlockingStub;
@@ -24,7 +32,7 @@ public class ChopGrpcClient {
 
     public void insertStatsToStatsServer(String shortenUrl, String referer, String userAgent) {
         Url url = Url.newBuilder().setShortUrl(shortenUrl)
-                .setClickTime(System.currentTimeMillis())
+                .setClickTime(generateCurrentTimestamp())
                 .setPlatform(userAgent)
                 .setReferer(referer).build();
 
@@ -43,9 +51,16 @@ public class ChopGrpcClient {
 
             @Override
             public void onCompleted() {
-                logger.info("서버 응답 종료");
+                logger.info("Grpc 서버 응답 종료");
             }
         });
+    }
+
+    private Timestamp generateCurrentTimestamp() {
+        long currentTimeMillis = System.currentTimeMillis();
+        return Timestamp.newBuilder().
+            setSeconds(currentTimeMillis / 1000)
+            .setNanos((int) ((currentTimeMillis % 1000) * 1000000)).build();
     }
 
     public Platform getPlatformStats(String shortenUrl) {
@@ -53,25 +68,41 @@ public class ChopGrpcClient {
                 .setShortUrl(shortenUrl)
                 .build();
 
-        Platform platform = urlStatsServiceBlockingStub.getPlatformCount(urlStatsRequest);
+        Platform platform = null;
 
-        logger.info("Server response [browser] {} ", platform.getBrowser());
-        logger.info("Server response [mobile] {} ", platform.getMobile());
+        try {
+            platform = urlStatsServiceBlockingStub.getPlatformCount(urlStatsRequest);
+        } catch (StatusRuntimeException e) {
+            if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
+                throw new EntityNotFoundException(e.getMessage());
+            }
+        }
 
         return platform;
     }
 
-    public Referer getRefererStats(String shortenUrl) {
+    public List<Referer> getRefererStats(String shortenUrl) {
         UrlStatsRequest urlStatsRequest = UrlStatsRequest.newBuilder()
                 .setShortUrl(shortenUrl)
                 .build();
 
-        Referer referer = urlStatsServiceBlockingStub.getRefererCount(urlStatsRequest);
+        List<Referer> referers = new ArrayList<>();
+        Iterator<Referer> refererIterator;
 
-        logger.info("Server response [referer] {} ", referer.getRefererList());
-        logger.info("Server response [referer count] {} ", referer.getCountList());
+        try {
+            refererIterator = urlStatsServiceBlockingStub.getRefererCount(urlStatsRequest);
 
-        return referer;
+            while (refererIterator.hasNext()) {
+                referers.add(refererIterator.next());
+            }
+
+        } catch (StatusRuntimeException e) {
+            if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
+                throw new EntityNotFoundException(e.getMessage());
+            }
+        }
+
+        return referers;
     }
 
     public TotalCount getTotalCount(String shortenUrl) {
@@ -79,10 +110,40 @@ public class ChopGrpcClient {
                 .setShortUrl(shortenUrl)
                 .build();
 
-        TotalCount totalCount = urlStatsServiceBlockingStub.getTotalCount(urlStatsRequest);
+        TotalCount totalCount = null;
 
-        logger.info("Server response [total count] {} ", totalCount.getTotalCount());
+        try {
+            totalCount = urlStatsServiceBlockingStub.getTotalCount(urlStatsRequest);
+        } catch (StatusRuntimeException e) {
+            if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
+                throw new EntityNotFoundException(e.getMessage());
+            }
+        }
 
         return totalCount;
+    }
+
+    public List<ClickCount> getClickCount(String shortenUrl, int week) {
+        UrlClickStatsRequest urlClickStatsRequest = UrlClickStatsRequest.newBuilder()
+                .setShortUrl(shortenUrl)
+                .setWeek(week)
+                .build();
+
+        List<ClickCount> clickCounts = new ArrayList<>();
+        Iterator<ClickCount> clickCountIterator;
+
+        try {
+            clickCountIterator = urlStatsServiceBlockingStub.getClickCount(urlClickStatsRequest);
+
+            while (clickCountIterator.hasNext()) {
+                clickCounts.add(clickCountIterator.next());
+            }
+        } catch (StatusRuntimeException e) {
+            if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
+                throw new EntityNotFoundException(e.getMessage());
+            }
+        }
+
+        return clickCounts;
     }
 }
