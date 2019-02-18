@@ -6,10 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,6 +32,7 @@ import me.nexters.chop.grpc.TotalCount;
 public class StatisticsController {
 	private final ChopGrpcClient grpcClient;
 
+	@CrossOrigin(origins = "*")
 	@GetMapping("/api/v1/urls/{shortenUrl}/platform")
 	@ApiOperation(value = "해당 url platform 반환", notes = "해당 url의 mobile, browser 카운트를 반환한다.", response = StatsMainResponseDto.class)
 	public ResponseEntity<StatsPlatformResponseDto> platformRequest(@PathVariable("shortenUrl") String shortenUrl) {
@@ -48,6 +46,7 @@ public class StatisticsController {
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "*")
 	@GetMapping("/api/v1/urls/{shortenUrl}/referer")
 	@ApiOperation(value = "해당 url referer 반환", notes = "해당 url의 referer 카운트를 반환한다.", response = StatsMainResponseDto.class)
 	public ResponseEntity<List<StatsRefererResponseDto>> refererRequest(@PathVariable("shortenUrl") String shortenUrl) {
@@ -63,6 +62,7 @@ public class StatisticsController {
 		return new ResponseEntity<>(statsRefererResponse, HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "*")
 	@GetMapping("/api/v1/urls/{shortenUrl}/totalcount")
 	@ApiOperation(value = "해당 url 총 클릭수 반환", notes = "해당 url의 총 클릭수를 반환한다.", response = StatsMainResponseDto.class)
 	public ResponseEntity<StatsTotalResponseDto> totalCountRequest(@PathVariable("shortenUrl") String shortenUrl) {
@@ -75,6 +75,7 @@ public class StatisticsController {
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "*")
 	@GetMapping("/api/v1/urls/{shortenUrl}/clickdate")
 	@ApiOperation(value = "해당 url 총 클릭수 반환", notes = "해당 url의 총 클릭수를 반환한다.", response = StatsMainResponseDto.class)
 	public ResponseEntity<List<StatsClickResponseDto>> clickCountRequest
