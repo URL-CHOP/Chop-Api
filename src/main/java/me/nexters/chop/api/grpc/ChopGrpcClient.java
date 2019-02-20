@@ -121,6 +121,9 @@ public class ChopGrpcClient {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
                 return Lists.newArrayList();
             }
+        } catch (NullPointerException e) {
+            log.error("null point exception while getting referer count: {}", e.getMessage());
+            return Lists.newArrayList();
         }
 
         return referers;
