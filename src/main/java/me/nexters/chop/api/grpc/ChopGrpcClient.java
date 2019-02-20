@@ -141,6 +141,11 @@ public class ChopGrpcClient {
                     .setTotalCount(0)
                     .build();
             }
+        } catch (NullPointerException e) {
+            log.error("null point exception while getting total count: {}", e.getMessage());
+            return TotalCount.newBuilder()
+                    .setTotalCount(0)
+                    .build();
         }
 
         return totalCount;
@@ -163,8 +168,11 @@ public class ChopGrpcClient {
             }
         } catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                Lists.newArrayList();
+                return Lists.newArrayList();
             }
+        } catch (NullPointerException e) {
+            log.error("null point exception while getting click count: {}", e.getMessage());
+            return Lists.newArrayList();
         }
 
         return clickCounts;
