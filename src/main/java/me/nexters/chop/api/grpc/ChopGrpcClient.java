@@ -78,9 +78,9 @@ public class ChopGrpcClient {
             log.error("null point exception while getting platform count: {}", e.getMessage());
         } catch (Exception e) {
             log.error("exception while getting platform count: {}", e.getMessage());
-        } finally {
-            return platform;
         }
+
+        return platform;
     }
 
     public List<Referer> getRefererStats(String shortenUrl) {
@@ -127,9 +127,9 @@ public class ChopGrpcClient {
             log.error("null point exception while getting total count: {}", e.getMessage());
         } catch (Exception e) {
             log.error("exception while getting total count: {}", e.getMessage());
-        } finally {
-            return totalCount;
         }
+
+        return totalCount;
     }
 
     public List<ClickCount> getClickCount(String shortenUrl, int week) {
