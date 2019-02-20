@@ -1,27 +1,25 @@
 package me.nexters.chop.api.grpc;
 
+import com.google.common.collect.Lists;
 import com.google.protobuf.Timestamp;
 import io.grpc.Channel;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
+import lombok.extern.slf4j.Slf4j;
 import me.nexters.chop.config.time.TimeUtil;
 import me.nexters.chop.grpc.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author junho.park
  */
+@Slf4j
 @Component
 public class ChopGrpcClient {
     private static Logger logger = LoggerFactory.getLogger(ChopGrpcClient.class);
@@ -78,7 +76,10 @@ public class ChopGrpcClient {
             platform = urlStatsServiceBlockingStub.getPlatformCount(urlStatsRequest);
         } catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                throw new EntityNotFoundException(e.getMessage());
+                return Platform.newBuilder()
+                    .setMobile(0)
+                    .setBrowser(0)
+                    .build();
             }
         }
 
@@ -102,7 +103,7 @@ public class ChopGrpcClient {
 
         } catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                throw new EntityNotFoundException(e.getMessage());
+                return Lists.newArrayList();
             }
         }
 
@@ -118,13 +119,22 @@ public class ChopGrpcClient {
 
         try {
             totalCount = urlStatsServiceBlockingStub.getTotalCount(urlStatsRequest);
-        } catch (StatusRuntimeException e) {
+        }
+        catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                throw new EntityNotFoundException(e.getMessage());
+                  return returnTotalCount();
             }
         }
+        finally {
+            return Optional.ofNullable(totalCount).orElseGet(()->returnTotalCount());
+        }
 
-        return totalCount;
+    }
+
+    public TotalCount returnTotalCount() {
+        return TotalCount.newBuilder()
+                .setTotalCount(0)
+                .build();
     }
 
     public List<ClickCount> getWeeklyClickCount(String shortenUrl, LocalDate date) {
@@ -144,7 +154,7 @@ public class ChopGrpcClient {
             }
         } catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                throw new EntityNotFoundException(e.getMessage());
+                Lists.newArrayList();
             }
         }
 

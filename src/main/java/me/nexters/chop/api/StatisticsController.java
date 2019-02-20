@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import me.nexters.chop.dto.stats.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,13 +29,14 @@ import me.nexters.chop.grpc.TotalCount;
 /**
  * @author junho.park
  */
+@Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Api(description = "통계 api")
 public class StatisticsController {
 	private final ChopGrpcClient grpcClient;
 
-	@GetMapping("/api/v1/urls/{shortenUrl}/platform}")
+	@GetMapping("/api/v1/urls/{shortenUrl}/platform")
 	@ApiOperation(value = "해당 url platform 반환", notes = "해당 url의 mobile, browser 카운트를 반환한다.", response = StatsMainResponseDto.class)
 	public ResponseEntity<StatsPlatformResponseDto> platformRequest(@PathVariable("shortenUrl") String shortenUrl) {
 		Platform platform = grpcClient.getPlatformStats(shortenUrl);
@@ -62,7 +64,7 @@ public class StatisticsController {
 		return new ResponseEntity<>(statsRefererResponse, HttpStatus.OK);
 	}
 
-	@GetMapping("/api/v1/urls/{shortenUrl}/totalcount}")
+	@GetMapping("/api/v1/urls/{shortenUrl}/totalcount")
 	@ApiOperation(value = "해당 url 총 클릭수 반환", notes = "해당 url의 총 클릭수를 반환한다.", response = StatsMainResponseDto.class)
 	public ResponseEntity<StatsTotalResponseDto> totalCountRequest(@PathVariable("shortenUrl") String shortenUrl) {
 		TotalCount totalCount = grpcClient.getTotalCount(shortenUrl);
