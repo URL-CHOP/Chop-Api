@@ -8,6 +8,7 @@ import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.dto.url.UrlResponseDto;
 import me.nexters.chop.service.RedirectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,7 @@ public class RedirectController {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(URI.create(originUrl));
+		headers.setCacheControl(CacheControl.noStore());
 
 		return new ResponseEntity<>(responseDto, headers, HttpStatus.MOVED_PERMANENTLY);
 	}

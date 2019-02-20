@@ -52,4 +52,9 @@ public class ShortenController {
 
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
+
+	@GetMapping("/error")
+	public ResponseEntity error() {
+		return new ResponseEntity(HttpStatus.NOT_FOUND);
+	}
 }
