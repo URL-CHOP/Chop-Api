@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,7 @@ import me.nexters.chop.grpc.UrlStatsServiceGrpc;
 /**
  * @author junho.park
  */
+@Slf4j
 @Component
 public class ChopGrpcClient {
     private static Logger logger = LoggerFactory.getLogger(ChopGrpcClient.class);
@@ -89,6 +91,12 @@ public class ChopGrpcClient {
                     .setBrowser(0)
                     .build();
             }
+        } catch (NullPointerException e) {
+            log.error("null point exception while getting platform count: {}", e.getMessage());
+            return Platform.newBuilder()
+                    .setMobile(0)
+                    .setBrowser(0)
+                    .build();
         }
 
         return platform;
@@ -113,6 +121,9 @@ public class ChopGrpcClient {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
                 return Lists.newArrayList();
             }
+        } catch (NullPointerException e) {
+            log.error("null point exception while getting referer count: {}", e.getMessage());
+            return Lists.newArrayList();
         }
 
         return referers;
@@ -133,6 +144,11 @@ public class ChopGrpcClient {
                     .setTotalCount(0)
                     .build();
             }
+        } catch (NullPointerException e) {
+            log.error("null point exception while getting total count: {}", e.getMessage());
+            return TotalCount.newBuilder()
+                    .setTotalCount(0)
+                    .build();
         }
 
         return totalCount;
@@ -155,8 +171,11 @@ public class ChopGrpcClient {
             }
         } catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                Lists.newArrayList();
+                return Lists.newArrayList();
             }
+        } catch (NullPointerException e) {
+            log.error("null point exception while getting click count: {}", e.getMessage());
+            return Lists.newArrayList();
         }
 
         return clickCounts;
