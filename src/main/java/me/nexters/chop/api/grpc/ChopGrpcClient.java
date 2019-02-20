@@ -80,26 +80,21 @@ public class ChopGrpcClient {
                 .setShortUrl(shortenUrl)
                 .build();
 
-        Platform platform = null;
+        Platform platform = Platform.newBuilder().setBrowser(0).setMobile(0).build();
 
         try {
             platform = urlStatsServiceBlockingStub.getPlatformCount(urlStatsRequest);
         } catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                return Platform.newBuilder()
-                    .setMobile(0)
-                    .setBrowser(0)
-                    .build();
+                log.error("url not found from gRPC while getting platform count : {}", e.getMessage());
             }
         } catch (NullPointerException e) {
             log.error("null point exception while getting platform count: {}", e.getMessage());
-            return Platform.newBuilder()
-                    .setMobile(0)
-                    .setBrowser(0)
-                    .build();
+        } catch (Exception e) {
+            log.error("exception while getting platform count: {}", e.getMessage());
+        } finally {
+            return platform;
         }
-
-        return platform;
     }
 
     public List<Referer> getRefererStats(String shortenUrl) {
@@ -134,24 +129,21 @@ public class ChopGrpcClient {
                 .setShortUrl(shortenUrl)
                 .build();
 
-        TotalCount totalCount = null;
+        TotalCount totalCount = TotalCount.newBuilder().setTotalCount(0).build();
 
         try {
             totalCount = urlStatsServiceBlockingStub.getTotalCount(urlStatsRequest);
         } catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                return TotalCount.newBuilder()
-                    .setTotalCount(0)
-                    .build();
+                log.error("url not found from gRPC while getting total count : {}", e.getMessage());
             }
         } catch (NullPointerException e) {
             log.error("null point exception while getting total count: {}", e.getMessage());
-            return TotalCount.newBuilder()
-                    .setTotalCount(0)
-                    .build();
+        } catch (Exception e) {
+            log.error("exception while getting total count: {}", e.getMessage());
+        } finally {
+            return totalCount;
         }
-
-        return totalCount;
     }
 
     public List<ClickCount> getClickCount(String shortenUrl, int week) {
