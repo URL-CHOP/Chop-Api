@@ -14,5 +14,7 @@ public class GrpcConfig {
     public ManagedChannel setChannel() {
         return ManagedChannelBuilder.forAddress("49.236.136.197", 6565)
                 .usePlaintext().build();
+
+
     }
 }
