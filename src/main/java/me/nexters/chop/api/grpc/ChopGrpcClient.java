@@ -35,7 +35,7 @@ public class ChopGrpcClient {
                 .setPlatform(userAgent)
                 .setReferer(referer).build();
 
-        log.info("클라이언트 측에서 클릭 정보 전송");
+        log.info("클라이언트 측에서 " + shortenUrl + " 클릭 정보 전송");
 
         urlClickStub.unaryRecordCount(url, new StreamObserver<Success>() {
             @Override
