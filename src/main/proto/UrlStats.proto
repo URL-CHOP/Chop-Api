@@ -14,7 +14,7 @@ message UrlStatsRequest {
 
 message UrlClickStatsRequest {
   string short_url = 1;
-  string date = 2;
+  int32 week = 2;
 }
 
 message Platform {
@@ -40,5 +40,5 @@ service UrlStatsService {
   rpc getPlatformCount (UrlStatsRequest) returns (Platform);
   rpc getRefererCount (UrlStatsRequest) returns (stream Referer);
   rpc getTotalCount (UrlStatsRequest) returns (TotalCount);
-  rpc getWeeklyClickCount (UrlClickStatsRequest) returns (stream ClickCount);
+  rpc getClickCount (UrlClickStatsRequest) returns (stream ClickCount);
 }

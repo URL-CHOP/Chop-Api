@@ -8,13 +8,10 @@ import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
-import me.nexters.chop.config.time.TimeUtil;
 import me.nexters.chop.grpc.*;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -137,17 +134,17 @@ public class ChopGrpcClient {
         return totalCount;
     }
 
-    public List<ClickCount> getWeeklyClickCount(String shortenUrl, LocalDate date) {
+    public List<ClickCount> getClickCount(String shortenUrl, int week) {
         UrlClickStatsRequest urlClickStatsRequest = UrlClickStatsRequest.newBuilder()
                 .setShortUrl(shortenUrl)
-                .setDate(TimeUtil.convertLocalDateToString(date))
+                .setWeek(week)
                 .build();
 
         List<ClickCount> clickCounts = new ArrayList<>();
         Iterator<ClickCount> clickCountIterator;
 
         try {
-            clickCountIterator = urlStatsServiceBlockingStub.getWeeklyClickCount(urlClickStatsRequest);
+            clickCountIterator = urlStatsServiceBlockingStub.getClickCount(urlClickStatsRequest);
 
             while (clickCountIterator.hasNext()) {
                 clickCounts.add(clickCountIterator.next());
@@ -162,10 +159,5 @@ public class ChopGrpcClient {
         }
 
         return clickCounts;
-    }
-
-    // TODO
-    public List<ClickCount> getMonthlyClickCount(String shortUrl, Date date) {
-        return null;
     }
 }
