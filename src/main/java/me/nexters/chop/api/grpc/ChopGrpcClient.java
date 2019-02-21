@@ -1,5 +1,6 @@
 package me.nexters.chop.api.grpc;
 
+
 import com.google.common.collect.Lists;
 import com.google.protobuf.Timestamp;
 import io.grpc.Channel;
@@ -7,10 +8,13 @@ import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
+import me.nexters.chop.config.time.TimeUtil;
 import me.nexters.chop.grpc.*;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -119,9 +123,10 @@ public class ChopGrpcClient {
 
         try {
             totalCount = urlStatsServiceBlockingStub.getTotalCount(urlStatsRequest);
-        } catch (StatusRuntimeException e) {
+        }
+        catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                log.error("url not found from gRPC while getting total count : {}", e.getMessage());
+                  return totalCount;
             }
         } catch (NullPointerException e) {
             log.error("null point exception while getting total count: {}", e.getMessage());
@@ -132,17 +137,17 @@ public class ChopGrpcClient {
         return totalCount;
     }
 
-    public List<ClickCount> getClickCount(String shortenUrl, int week) {
+    public List<ClickCount> getWeeklyClickCount(String shortenUrl, LocalDate date) {
         UrlClickStatsRequest urlClickStatsRequest = UrlClickStatsRequest.newBuilder()
                 .setShortUrl(shortenUrl)
-                .setWeek(week)
+                .setDate(TimeUtil.convertLocalDateToString(date))
                 .build();
 
         List<ClickCount> clickCounts = new ArrayList<>();
         Iterator<ClickCount> clickCountIterator;
 
         try {
-            clickCountIterator = urlStatsServiceBlockingStub.getClickCount(urlClickStatsRequest);
+            clickCountIterator = urlStatsServiceBlockingStub.getWeeklyClickCount(urlClickStatsRequest);
 
             while (clickCountIterator.hasNext()) {
                 clickCounts.add(clickCountIterator.next());
@@ -157,5 +162,10 @@ public class ChopGrpcClient {
         }
 
         return clickCounts;
+    }
+
+    // TODO
+    public List<ClickCount> getMonthlyClickCount(String shortUrl, Date date) {
+        return null;
     }
 }

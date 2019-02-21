@@ -1,5 +1,4 @@
 package me.nexters.chop.api;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

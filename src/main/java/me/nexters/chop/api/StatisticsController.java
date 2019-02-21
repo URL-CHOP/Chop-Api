@@ -1,9 +1,14 @@
 package me.nexters.chop.api;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
+import me.nexters.chop.dto.stats.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +18,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.nexters.chop.api.grpc.ChopGrpcClient;
 import me.nexters.chop.config.time.TimeUtil;
-import me.nexters.chop.dto.stats.StatsClickResponseDto;
-import me.nexters.chop.dto.stats.StatsMainResponseDto;
-import me.nexters.chop.dto.stats.StatsPlatformResponseDto;
-import me.nexters.chop.dto.stats.StatsRefererResponseDto;
-import me.nexters.chop.dto.stats.StatsTotalResponseDto;
 import me.nexters.chop.grpc.ClickCount;
 import me.nexters.chop.grpc.Platform;
 import me.nexters.chop.grpc.Referer;
@@ -26,6 +26,7 @@ import me.nexters.chop.grpc.TotalCount;
 /**
  * @author junho.park
  */
+@Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Api(description = "통계 api")
@@ -78,10 +79,10 @@ public class StatisticsController {
 	@CrossOrigin(origins = "*")
 	@GetMapping("/api/v1/urls/{shortenUrl}/clickdate")
 	@ApiOperation(value = "해당 url 총 클릭수 반환", notes = "해당 url의 총 클릭수를 반환한다.", response = StatsMainResponseDto.class)
-	public ResponseEntity<List<StatsClickResponseDto>> clickCountRequest
-			(@PathVariable("shortenUrl") String shortenUrl, @RequestParam int week) {
+	public ResponseEntity<List<StatsClickResponseDto>> clickWeeklyCountRequest
+			(@PathVariable("shortenUrl") String shortenUrl, @RequestParam(value="date")@DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date) {
+		List<ClickCount> clickCounts = grpcClient.getWeeklyClickCount(shortenUrl, date);
 
-		List<ClickCount> clickCounts = grpcClient.getClickCount(shortenUrl, week);
 		List<StatsClickResponseDto> response = clickCounts.stream()
 			.map(clickCount -> StatsClickResponseDto.builder()
 				.clickDate(TimeUtil.convertTimestampToString(clickCount.getDate()))
@@ -90,5 +91,14 @@ public class StatisticsController {
 			.collect(Collectors.toList());
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	// TODO month
+	@GetMapping("/api/v1/urls/{shortenUrl}/clickdate/month")
+	@ApiOperation(value = "해당 url 총 클릭수 반환", notes = "해당 url의 총 클릭수를 반환한다.", response = StatsMainResponseDto.class)
+	public ResponseEntity<List<StatsClickResponseDto>> clickMonthlyCountRequest
+			(@PathVariable("shortenUrl") String shortenUrl, @RequestParam(value="date")@DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date) {
+
+		return null;
 	}
 }
