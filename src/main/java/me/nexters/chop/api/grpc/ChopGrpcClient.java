@@ -1,15 +1,6 @@
 package me.nexters.chop.api.grpc;
 
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
 import com.google.common.collect.Lists;
 import com.google.protobuf.Timestamp;
 import io.grpc.Channel;
@@ -19,16 +10,11 @@ import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import me.nexters.chop.config.time.TimeUtil;
 import me.nexters.chop.grpc.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.*;
-import me.nexters.chop.grpc.*;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -140,23 +126,15 @@ public class ChopGrpcClient {
         }
         catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                  return returnTotalCount();
+                  return totalCount;
             }
         } catch (NullPointerException e) {
             log.error("null point exception while getting total count: {}", e.getMessage());
         } catch (Exception e) {
             log.error("exception while getting total count: {}", e.getMessage());
         }
-        finally {
-            return Optional.ofNullable(totalCount).orElseGet(()->returnTotalCount());
-        }
 
-    }
-
-    public TotalCount returnTotalCount() {
-        return TotalCount.newBuilder()
-                .setTotalCount(0)
-                .build();
+        return totalCount;
     }
 
     public List<ClickCount> getWeeklyClickCount(String shortenUrl, LocalDate date) {
