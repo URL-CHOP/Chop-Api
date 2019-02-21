@@ -25,6 +25,12 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.*;
+import me.nexters.chop.grpc.*;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author junho.park
@@ -32,8 +38,6 @@ import java.util.*;
 @Slf4j
 @Component
 public class ChopGrpcClient {
-    private static Logger logger = LoggerFactory.getLogger(ChopGrpcClient.class);
-
     private UrlClickServiceGrpc.UrlClickServiceStub urlClickStub;
     private UrlStatsServiceGrpc.UrlStatsServiceBlockingStub urlStatsServiceBlockingStub;
 
@@ -48,22 +52,22 @@ public class ChopGrpcClient {
                 .setPlatform(userAgent)
                 .setReferer(referer).build();
 
-        logger.info("클라이언트 측에서 클릭 정보 전송");
+        log.info("클라이언트 측에서 클릭 정보 전송");
 
         urlClickStub.unaryRecordCount(url, new StreamObserver<Success>() {
             @Override
             public void onNext(Success success) {
-                logger.info(success.getMessage());
+                log.info(success.getMessage());
             }
 
             @Override
             public void onError(Throwable throwable) {
-                logger.error(throwable.getMessage());
+                log.error(throwable.getMessage());
             }
 
             @Override
             public void onCompleted() {
-                logger.info("Grpc 서버 응답 종료");
+                log.info("Grpc 서버 응답 종료");
             }
         });
     }
@@ -80,23 +84,18 @@ public class ChopGrpcClient {
                 .setShortUrl(shortenUrl)
                 .build();
 
-        Platform platform = null;
+        Platform platform = Platform.newBuilder().setBrowser(0).setMobile(0).build();
 
         try {
             platform = urlStatsServiceBlockingStub.getPlatformCount(urlStatsRequest);
         } catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                return Platform.newBuilder()
-                    .setMobile(0)
-                    .setBrowser(0)
-                    .build();
+                log.error("url not found from gRPC while getting platform count : {}", e.getMessage());
             }
         } catch (NullPointerException e) {
             log.error("null point exception while getting platform count: {}", e.getMessage());
-            return Platform.newBuilder()
-                    .setMobile(0)
-                    .setBrowser(0)
-                    .build();
+        } catch (Exception e) {
+            log.error("exception while getting platform count: {}", e.getMessage());
         }
 
         return platform;
@@ -134,7 +133,7 @@ public class ChopGrpcClient {
                 .setShortUrl(shortenUrl)
                 .build();
 
-        TotalCount totalCount = null;
+        TotalCount totalCount = TotalCount.newBuilder().setTotalCount(0).build();
 
         try {
             totalCount = urlStatsServiceBlockingStub.getTotalCount(urlStatsRequest);
@@ -145,9 +144,8 @@ public class ChopGrpcClient {
             }
         } catch (NullPointerException e) {
             log.error("null point exception while getting total count: {}", e.getMessage());
-            return TotalCount.newBuilder()
-                    .setTotalCount(0)
-                    .build();
+        } catch (Exception e) {
+            log.error("exception while getting total count: {}", e.getMessage());
         }
         finally {
             return Optional.ofNullable(totalCount).orElseGet(()->returnTotalCount());
