@@ -19,7 +19,7 @@ spring:
     password: nexters12
     hikari:
       leak-detection-threshold: 120000
-      max-lifetime: 1200000
+      max-lifetime: 700000
     jpa:
         show-sql : true
         database : default
