@@ -7,34 +7,21 @@ string:
     aab
   base62matchPattern:
     ^([A-Za-z0-9]*)$
----
 
-#url 디비
 spring:
   datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://101.101.162.240:3306/chop?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://101.101.162.240:3306/chop?autoReconnect=true&useSSL=false&serverTimezone=UTC
     username: short
     password: nexters12
-    hikari:
-      leak-detection-threshold: 120000
-      max-lifetime: 620000
-    jpa:
-        show-sql : true
-        database : default
-        profiles:
-          hibernate:
-            format_sql : true
----
-#jpa 설정
 
-jpa:
-  hibernate:
-    naming:
-      physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  jpa:
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
 logging:
   level:
     org.hibernate.sql : debug
-    org.hibernate.type.descriptor.sql : TRACE
+    org.hibernate.type.descriptor.sql : trace
+    com.zaxxer.hikari.HikariConfig : debug
