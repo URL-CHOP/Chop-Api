@@ -15,7 +15,7 @@ public class GrpcConfig {
     @Bean
     public ManagedChannel setChannel() {
         return ManagedChannelBuilder.forAddress("49.236.136.197", 6565)
-                .keepAliveTime(60, TimeUnit.SECONDS)
+                .keepAliveTime(5, TimeUnit.SECONDS)
                 .usePlaintext().build();
     }
 }
