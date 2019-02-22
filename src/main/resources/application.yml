@@ -13,6 +13,8 @@ spring:
     url: jdbc:mysql://101.101.162.240:3306/chop?autoReconnect=true&useSSL=false&serverTimezone=UTC
     username: short
     password: nexters12
+    hikari:
+      max-lifetime: 300000
 
   jpa:
     show-sql: true
