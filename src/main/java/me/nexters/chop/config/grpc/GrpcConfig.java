@@ -15,5 +15,7 @@ public class GrpcConfig {
         return ManagedChannelBuilder.forAddress("49.236.136.197", 6565)
                 .keepAliveWithoutCalls(false)
                 .usePlaintext().build();
+
+
     }
 }
