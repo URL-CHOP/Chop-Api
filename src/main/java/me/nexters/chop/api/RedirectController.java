@@ -3,6 +3,7 @@ package me.nexters.chop.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.nexters.chop.api.grpc.ChopGrpcClient;
 import me.nexters.chop.domain.url.Url;
 import me.nexters.chop.dto.url.UrlResponseDto;
@@ -22,6 +23,7 @@ import java.net.URI;
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Api(description = "리다이렉트 api")
+@Slf4j
 public class RedirectController {
 
     private final RedirectService redirectService;
@@ -37,6 +39,8 @@ public class RedirectController {
 		Url url = redirectService.redirect(shortenUrl);
 
 		String originUrl = url.getOriginUrl();
+
+		log.info("user-agent : {}", userAgent);
 
 		UrlResponseDto responseDto = UrlResponseDto.builder()
 			.originUrl(originUrl)
