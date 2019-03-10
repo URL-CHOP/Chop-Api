@@ -42,7 +42,7 @@ public class ShortenService {
 
 	@Transactional
 	public Url shorten(UrlRequestDto dto) {
-		String originUrl = dto.getOriginUrl().trim();
+		String originUrl = convertUrlWithHttpHeader(dto.getOriginUrl().trim());
 
 		return Optional.ofNullable(shortenRepository
 			.findUrlByOriginUrl(originUrl)).orElseGet(() -> saveUrl(originUrl));
@@ -50,7 +50,6 @@ public class ShortenService {
 
 	private Url saveUrl(String originUrl) {
 		int hashNumber = findMaxIdFromDatabase();
-
 
 		Url url = Url.builder()
 				.originUrl(originUrl)
@@ -74,5 +73,15 @@ public class ShortenService {
 		return globalCountRepository.findById(1L)
 			.orElse(GlobalCount.empty())
 			.getGlobalCount();
+	}
+
+	private String convertUrlWithHttpHeader(String originUrl) {
+		if (originUrl.startsWith("http://") || originUrl.startsWith("https://") || originUrl.startsWith("http://www.") || originUrl.startsWith("https://www.")) {
+			return originUrl;
+		} else if (originUrl.startsWith("www.")) {
+			return "http://" + originUrl;
+		} else {
+			return "http://www." + originUrl;
+		}
 	}
 }
