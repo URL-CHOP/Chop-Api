@@ -38,7 +38,7 @@ public class ChopGrpcClient {
 
         log.info("클라이언트 측에서 " + shortenUrl + " 클릭 정보 전송");
 
-        urlClickStub.withDeadlineAfter(500, TimeUnit.MILLISECONDS).unaryRecordCount(url, new StreamObserver<Success>() {
+        urlClickStub.withDeadlineAfter(800, TimeUnit.MILLISECONDS).unaryRecordCount(url, new StreamObserver<Success>() {
             @Override
             public void onNext(Success success) {
                 log.info(success.getMessage());
@@ -51,7 +51,7 @@ public class ChopGrpcClient {
 
             @Override
             public void onCompleted() {
-                log.info("Grpc 서버 응답 종료");
+                log.info("url : " + shortenUrl + " gRPC 서버 응답 종료");
             }
         });
     }
@@ -71,18 +71,18 @@ public class ChopGrpcClient {
         Platform platform = Platform.newBuilder().setBrowser(0).setMobile(0).build();
 
         try {
-            platform = urlStatsServiceBlockingStub.withDeadlineAfter(500, TimeUnit.MILLISECONDS).getPlatformCount(urlStatsRequest);
+            platform = urlStatsServiceBlockingStub.withDeadlineAfter(800, TimeUnit.MILLISECONDS).getPlatformCount(urlStatsRequest);
         } catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
-                log.error("url not found from gRPC while getting platform count : {}", e.getMessage());
+                log.error("url : " + shortenUrl + " url not found from gRPC while getting platform count : {}", e.getMessage());
             }
             if (e.getStatus().getCode() == Status.Code.CANCELLED) {
-                log.error("cancelled by client: {}", e.getMessage());
+                log.error("url : " + shortenUrl + " cancelled by client: {}", e.getMessage());
             }
         } catch (NullPointerException e) {
-            log.error("null point exception while getting platform count: {}", e.getMessage());
+            log.error("url : " + shortenUrl + " null point exception while getting platform count: {}", e.getMessage());
         } catch (Exception e) {
-            log.error("exception while getting platform count: {}", e.getMessage());
+            log.error("url : " + shortenUrl + " exception while getting platform count: {}", e.getMessage());
         }
 
         return platform;
@@ -97,7 +97,7 @@ public class ChopGrpcClient {
         Iterator<Referer> refererIterator;
 
         try {
-            refererIterator = urlStatsServiceBlockingStub.withDeadlineAfter(500, TimeUnit.MILLISECONDS).getRefererCount(urlStatsRequest);
+            refererIterator = urlStatsServiceBlockingStub.withDeadlineAfter(800, TimeUnit.MILLISECONDS).getRefererCount(urlStatsRequest);
 
             while (refererIterator.hasNext()) {
                 referers.add(refererIterator.next());
@@ -108,10 +108,10 @@ public class ChopGrpcClient {
                 return Lists.newArrayList();
             }
             if (e.getStatus().getCode() == Status.Code.CANCELLED) {
-                log.error("cancelled by client: {}", e.getMessage());
+                log.error("url : " + shortenUrl + " cancelled by client: {}", e.getMessage());
             }
         } catch (NullPointerException e) {
-            log.error("null point exception while getting referer count: {}", e.getMessage());
+            log.error("url : " + shortenUrl + " null point exception while getting referer count: {}", e.getMessage());
             return Lists.newArrayList();
         }
 
@@ -126,19 +126,19 @@ public class ChopGrpcClient {
         TotalCount totalCount = TotalCount.newBuilder().setTotalCount(0).build();
 
         try {
-            totalCount = urlStatsServiceBlockingStub.withDeadlineAfter(500, TimeUnit.MILLISECONDS).getTotalCount(urlStatsRequest);
+            totalCount = urlStatsServiceBlockingStub.withDeadlineAfter(800, TimeUnit.MILLISECONDS).getTotalCount(urlStatsRequest);
         }
         catch (StatusRuntimeException e) {
             if (e.getStatus().getCode() == Status.Code.NOT_FOUND) {
                   return totalCount;
             }
             if (e.getStatus().getCode() == Status.Code.CANCELLED) {
-                log.error("cancelled by client: {}", e.getMessage());
+                log.error("url : " + shortenUrl + " cancelled by client: {}", e.getMessage());
             }
         } catch (NullPointerException e) {
-            log.error("null point exception while getting total count: {}", e.getMessage());
+            log.error("url : " + shortenUrl + " null point exception while getting total count: {}", e.getMessage());
         } catch (Exception e) {
-            log.error("exception while getting total count: {}", e.getMessage());
+            log.error("url : " + shortenUrl + " exception while getting total count: {}", e.getMessage());
         }
 
         return totalCount;
@@ -154,7 +154,7 @@ public class ChopGrpcClient {
         Iterator<ClickCount> clickCountIterator;
 
         try {
-            clickCountIterator = urlStatsServiceBlockingStub.withDeadlineAfter(500, TimeUnit.MILLISECONDS).getClickCount(urlClickStatsRequest);
+            clickCountIterator = urlStatsServiceBlockingStub.withDeadlineAfter(800, TimeUnit.MILLISECONDS).getClickCount(urlClickStatsRequest);
 
             while (clickCountIterator.hasNext()) {
                 clickCounts.add(clickCountIterator.next());
@@ -164,10 +164,10 @@ public class ChopGrpcClient {
                 return Lists.newArrayList();
             }
             if (e.getStatus().getCode() == Status.Code.CANCELLED) {
-                log.error("cancelled by client: {}", e.getMessage());
+                log.error("url : " + shortenUrl + " cancelled by client: {}", e.getMessage());
             }
         } catch (NullPointerException e) {
-            log.error("null point exception while getting click count: {}", e.getMessage());
+            log.error("url : " + shortenUrl + " null point exception while getting click count: {}", e.getMessage());
             return Lists.newArrayList();
         }
 
