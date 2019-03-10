@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class ChopScheduler {
     private final ChopGrpcClient grpcClient;
 
-    @Scheduled(fixedDelay = 300000)
+    @Scheduled(fixedDelay = 240000)
     public void check() {
         log.info("scheduled data inserted & selected");
 
