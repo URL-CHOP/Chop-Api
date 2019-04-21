@@ -19,9 +19,6 @@ public class ChopScheduler {
 
     @Scheduled(fixedDelay = 240000)
     public void check() {
-        log.info("scheduled data inserted & selected");
-
-        grpcClient.insertStatsToStatsServer("a", "web", "Browser");
         TotalCount totalCount = grpcClient.getTotalCount("a");
         log.info("scheduled select value : " + String.valueOf(totalCount.getTotalCount()));
     }
