@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Configuration
 public class GrpcConfig {
-    private static final String STAT_SERVER_IP = "45.119.144.56";
+    private static final String STAT_SERVER_IP = "211.249.63.227";
     private static final int STAT_SERVER_GRPC_PORT = 6565;
 
     @Bean
