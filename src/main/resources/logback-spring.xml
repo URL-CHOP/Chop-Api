@@ -23,7 +23,7 @@
             <fileNamePattern>/nexters/dateLog/%d{yyyy_MM_dd}_%i.chop.log</fileNamePattern>
 
             <maxFileSize>50MB</maxFileSize>
-            <maxHistory>14</maxHistory>
+            <maxHistory>7</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
 
@@ -43,7 +43,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>/nexters/dateLog/%d{yyyy_MM_dd}_%i.chop_error.log</fileNamePattern>
             <maxFileSize>50MB</maxFileSize>
-            <maxHistory>14</maxHistory>
+            <maxHistory>7</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
     </appender>
