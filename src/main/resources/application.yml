@@ -27,3 +27,6 @@ logging:
     org.hibernate.sql : debug
     org.hibernate.type.descriptor.sql : trace
     com.zaxxer.hikari.HikariConfig : debug
+
+server:
+  port: 8081
