@@ -10,8 +10,8 @@ string:
 
 spring:
   datasource:
-    url: jdbc:mysql://101.101.162.240:3306/chop?autoReconnect=true&useSSL=false&serverTimezone=UTC
-    username: short
+    url: jdbc:mysql://211.249.63.227:3306/chop?autoReconnect=true&useSSL=false&serverTimezone=UTC
+    username: chop
     password: nexters12
     hikari:
       max-lifetime: 300000
